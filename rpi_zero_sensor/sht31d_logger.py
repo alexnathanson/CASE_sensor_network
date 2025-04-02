@@ -1,12 +1,3 @@
-# from time import sleep
-# import datetime
-# import numpy as np
-# import pandas as pd
-# import csv
-# import os
-# import sys
-# import platform
-
 import adafruit_sht31d
 import board
 import time
@@ -14,7 +5,7 @@ import csv
 import os
 import pandas as pd
 import datetime
-import signal
+#import signal
 
 i2c = board.I2C() # this also works
 sensor = adafruit_sht31d.SHT31D(i2c)
@@ -58,22 +49,22 @@ def main():
 			print(e)
 			newDF.to_csv(fileName, sep=',',index=False)
 
-
 		time.sleep(20)
 
 if __name__ == "__main__":
+	main()
 	# Suppress FutureWarnings
 	# import warnings
 
 	# warnings.simplefilter("ignore", FutureWarning)
 
 	# Setup signal handlers for graceful shutdown
-	signal.signal(signal.SIGINT, handle_signal)
-	signal.signal(signal.SIGTERM, handle_signal)
+	# signal.signal(signal.SIGINT, handle_signal)
+	# signal.signal(signal.SIGTERM, handle_signal)
 
-	try:
-		asyncio.run(main(location))
-	except KeyboardInterrupt:
-		log_info("Script interrupted by user via KeyboardInterrupt.")
-	except Exception as e:
-		log_error(f"Unexpected error in main: {e}")
+	# try:
+	# 	asyncio.run(main(location))
+	# except KeyboardInterrupt:
+	# 	log_info("Script interrupted by user via KeyboardInterrupt.")
+	# except Exception as e:
+	# 	log_error(f"Unexpected error in main: {e}")
