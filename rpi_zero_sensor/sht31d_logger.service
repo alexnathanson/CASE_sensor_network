@@ -4,7 +4,7 @@ After=network.target
 Wants=network.target
 
 [Service]
-ExecStart=/home/case/venv/bin/python /home/case/sht31d_logger.py
+ExecStart=/home/case/venv/bin/python /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py
 WorkingDirectory=/home/case
 StandardOutput=inherit
 StandardError=inherit

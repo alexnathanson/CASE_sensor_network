@@ -1,4 +1,4 @@
-# Installation
+# RPi Zero W2 Installation
 
 ## OS and Software Installation
 
@@ -9,8 +9,7 @@ Clone repository
 `git clone https://github.com/alexnathanson/CASE_sensor_network.git`
 
 Create data directory
-`cd /home/case/CASE_sensor_network`<br>
-`mkdir data`
+`mkdir /home/case/data`
 
 Create venv
 `python -m venv venv`
@@ -54,3 +53,7 @@ Check if its running
 
 ### Logs
 `journalctl -u sht31d_logger.service -f`
+
+Stop (temporary) or disable (doesn't start on boot) Service
+sudo systemctl stop sht31d_logger.service
+sudo systemctl disable sht31d_logger.service
