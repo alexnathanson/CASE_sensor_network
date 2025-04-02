@@ -37,13 +37,13 @@ def main():
 	    # print(f"Humidity: {sensor.relative_humidity:.2f}%")
 
 	    newDF = pd.DataFrame(data={
-                "datetime" : [datetime.datetime.now()],
-                "tempC": tempC,
-                "tempF": tempF,
-                "humidityP": humidity})
+	    	"datetime" : [datetime.datetime.now()],
+	    	"tempC": tempC,
+	    	"tempF": tempF,
+	    	"humidityP": humidity})
 
 	    print(newDF)
-	    
+
     	# create a new file daily to save data
         # or append if the file already exists
         fileName = 'data/'+str(datetime.date.today())+'.csv'
