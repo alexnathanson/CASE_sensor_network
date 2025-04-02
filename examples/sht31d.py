@@ -23,6 +23,6 @@ def cToF(c):
 
 while True:
     print(f"\nTemperature: {sensor.temperature:.2f} C")
-    print(f"Temperature: {cToF(sensor.temperature:.2f)} F")
+    print(f"Temperature: {cToF(sensor.temperature):.2f} F")
     print(f"Humidity: {sensor.relative_humidity:.2f}%")
     time.sleep(10)
