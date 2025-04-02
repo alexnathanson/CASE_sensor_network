@@ -32,48 +32,48 @@ def main():
 		tempF = cToF(sensor.temperature)
 		humidity = sensor.relative_humidity
 
-	    # print(f"\nTemperature: {sensor.temperature:.2f} C")
-	    # print(f"Temperature: {cToF(sensor.temperature):.2f} F")
-	    # print(f"Humidity: {sensor.relative_humidity:.2f}%")
+		# print(f"\nTemperature: {sensor.temperature:.2f} C")
+		# print(f"Temperature: {cToF(sensor.temperature):.2f} F")
+		# print(f"Humidity: {sensor.relative_humidity:.2f}%")
 		
 		newDF = pd.DataFrame(data={
-	    	"datetime" : [datetime.datetime.now()],
-	    	"tempC": tempC,
-	    	"tempF": tempF,
-	    	"humidityP": humidity})
+			"datetime" : [datetime.datetime.now()],
+			"tempC": tempC,
+			"tempF": tempF,
+			"humidityP": humidity})
 
-	    print(newDF)
+		print(newDF)
 
-    	# create a new file daily to save data
-        # or append if the file already exists
-        fileName = 'data/'+str(datetime.date.today())+'.csv'
+		# create a new file daily to save data
+		# or append if the file already exists
+		fileName = 'data/'+str(datetime.date.today())+'.csv'
 
-        try:
-            with open(fileName) as csvfile:
-                df = pd.read_csv(fileName)
-                df = pd.concat([df,newDF], ignore_index = True)
-                #df = df.append(newDF, ignore_index = True)
-                df.to_csv(fileName, sep=',',index=False)
-        except Exception as e:
-            print(e)
-            newDF.to_csv(fileName, sep=',',index=False)
+		try:
+			with open(fileName) as csvfile:
+				df = pd.read_csv(fileName)
+				df = pd.concat([df,newDF], ignore_index = True)
+				#df = df.append(newDF, ignore_index = True)
+				df.to_csv(fileName, sep=',',index=False)
+		except Exception as e:
+			print(e)
+			newDF.to_csv(fileName, sep=',',index=False)
 
 
-	    time.sleep(20)
+		time.sleep(20)
 
 if __name__ == "__main__":
-    # Suppress FutureWarnings
-    # import warnings
+	# Suppress FutureWarnings
+	# import warnings
 
-    # warnings.simplefilter("ignore", FutureWarning)
+	# warnings.simplefilter("ignore", FutureWarning)
 
-    # Setup signal handlers for graceful shutdown
-    signal.signal(signal.SIGINT, handle_signal)
-    signal.signal(signal.SIGTERM, handle_signal)
+	# Setup signal handlers for graceful shutdown
+	signal.signal(signal.SIGINT, handle_signal)
+	signal.signal(signal.SIGTERM, handle_signal)
 
-    try:
-        asyncio.run(main(location))
-    except KeyboardInterrupt:
-        log_info("Script interrupted by user via KeyboardInterrupt.")
-    except Exception as e:
-        log_error(f"Unexpected error in main: {e}")
+	try:
+		asyncio.run(main(location))
+	except KeyboardInterrupt:
+		log_info("Script interrupted by user via KeyboardInterrupt.")
+	except Exception as e:
+		log_error(f"Unexpected error in main: {e}")
