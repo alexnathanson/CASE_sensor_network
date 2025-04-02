@@ -35,8 +35,8 @@ def main():
 	    # print(f"\nTemperature: {sensor.temperature:.2f} C")
 	    # print(f"Temperature: {cToF(sensor.temperature):.2f} F")
 	    # print(f"Humidity: {sensor.relative_humidity:.2f}%")
-
-	    newDF = pd.DataFrame(data={
+		
+		newDF = pd.DataFrame(data={
 	    	"datetime" : [datetime.datetime.now()],
 	    	"tempC": tempC,
 	    	"tempF": tempF,
