@@ -39,7 +39,7 @@ def main():
 
 		# create a new file daily to save data
 		# or append if the file already exists
-		fileName = 'data/sensor' + deviceNum + '_'+str(datetime.date.today())+'.csv'
+		fileName = 'data/sensor' + str(deviceNum) + '_'+str(datetime.date.today())+'.csv'
 
 		try:
 			with open(fileName) as csvfile:

@@ -4,7 +4,7 @@ import csv
 app = Flask(__name__)
 
 deviceNum = 1
-fileName = 'data/sensor' + deviceNum + '_'+str(datetime.date.today())+'.csv'
+fileName = 'data/sensor' + str(deviceNum) + '_'+str(datetime.date.today())+'.csv'
 
 HTML = """
 <!DOCTYPE html>
