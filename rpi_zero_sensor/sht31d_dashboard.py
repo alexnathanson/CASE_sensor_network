@@ -72,7 +72,7 @@ def list_csv_files():
     #fileName = filePrefix +str(datetime.date.today())+'.csv'
 
     # Get all CSV files in the data/ directory
-    file_pattern = os.path.join(filePath, f"{filePrefix}_*.csv")
+    file_pattern = os.path.join(filePath, f"{filePrefix}*.csv")
     files = sorted(glob.glob(file_pattern))
 
     # Return just the filenames (without full paths)
@@ -80,5 +80,25 @@ def list_csv_files():
 
     return jsonify(filenames)
 
+@app.route("/api/disk")
+def get_disk_usage():
+    stat = os.statvfs("/")
+
+    total = stat.f_frsize * stat.f_blocks      # Total space
+    free = stat.f_frsize * stat.f_bavail       # Available space
+    used = total - free
+
+    total_mb = total // (1024 * 1024)
+    used_mb = used // (1024 * 1024)
+    free_mb = free // (1024 * 1024)
+    percent_used = round((used / total) * 100, 1)
+
+    return jsonify({
+        "total_mb": total_mb,
+        "used_mb": used_mb,
+        "free_mb": free_mb,
+        "percent_used": percent_used
+    })
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
