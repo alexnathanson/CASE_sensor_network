@@ -1,5 +1,6 @@
 from flask import Flask, render_template_string
 import csv
+import datetime
 
 app = Flask(__name__)
 
@@ -41,8 +42,29 @@ def index():
     with open(fileName, newline='') as f:
         reader = csv.reader(f)
         next(reader)  # skip header
-        rows = list(reader)[-10:]  # last 10 readings
+        rows = list(reader)#[-10:]  # last 10 readings
     return render_template_string(HTML, data=rows)
 
+
+@app.route("/api/data")
+def get_csv_for_date():
+    date = request.args.get("date")
+    if not date:
+        return "Please provide a date using ?date=YYYY-MM-DD", 400
+
+    filename = f"sht31d_data_{date}.csv"
+    filepath = os.path.join(DATA_DIR, filename)
+
+    if not os.path.exists(filepath):
+        return f"No data found for {date}", 404
+
+    return send_file(filepath, as_attachment=True, download_name=filename)
+
+def get_latest_csv():
+    # Optional helper to auto-detect latest log file
+    import glob
+    files = sorted(glob.glob(os.path.join(DATA_DIR, "sht31d_data_*.csv")), reverse=True)
+    return files[0] if files else None
+    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
