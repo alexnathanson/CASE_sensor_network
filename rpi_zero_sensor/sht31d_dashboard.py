@@ -21,6 +21,9 @@ HTML = """
 </head>
 <body>
     <h1>🌡️ Pi Sensor Dashboard</h1>
+    <p>
+        Download CSV file with the end point /api/data?date=YYYY-MM-DD
+    </p>
     <table>
         <tr><th>Timestamp</th><th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th></tr>
         {% for row in data %}
@@ -65,6 +68,6 @@ def get_latest_csv():
     import glob
     files = sorted(glob.glob(os.path.join(DATA_DIR, "sht31d_data_*.csv")), reverse=True)
     return files[0] if files else None
-    
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
