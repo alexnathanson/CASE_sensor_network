@@ -47,6 +47,13 @@ Reload and enable
 Check if its running
 `sudo systemctl status sht31d_logger.service`
 
+Dashboard Automation:
+
+sudo systemctl daemon-reload
+sudo systemctl enable sht31d_dashboard
+sudo systemctl start sht31d_dashboard
+
+
 ## SHT31-D Sensor Wiring
 ![image](https://cdn-learn.adafruit.com/assets/assets/000/101/432/medium640/adafruit_products_SHT31_RasPi_breadboard_bb.jpg?1618427246)
 
