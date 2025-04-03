@@ -34,7 +34,6 @@ If that fails, install manually:
 Make script executable
 `chmod +x /home/case/CASE_sensor_network/sht31d_logger.py`
 
-
 Copy service file
 `sudo cp sh31d_logger.service /etc/systemd/system/sht31d_logger.service`
 
@@ -48,10 +47,12 @@ Check if its running
 `sudo systemctl status sht31d_logger.service`
 
 Dashboard Automation:
-
-sudo systemctl daemon-reload
-sudo systemctl enable sht31d_dashboard
-sudo systemctl start sht31d_dashboard
+`chmod +x /home/case/CASE_sensor_network/sht31d_dashboard.py`
+`sudo cp sh31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service`
+`sudo systemctl daemon-reexec`
+`sudo systemctl daemon-reload`
+`sudo systemctl enable sht31d_dashboard.service`
+`sudo systemctl start sht31d_dashboard.service`
 
 
 ## SHT31-D Sensor Wiring

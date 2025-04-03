@@ -1,7 +1,8 @@
-from flask import Flask, render_template_string, request, send_file, abort
+from flask import Flask, render_template_string, request, send_file, abort, jsonify
 import csv
 import datetime
 import os 
+import glob
 
 app = Flask(__name__)
 
@@ -22,7 +23,7 @@ HTML = """
     </style>
 </head>
 <body>
-    <h1>🌡️ Pi Sensor Dashboard</h1>
+    <h1>Pi Zero W2 SHT31D Sensor Dashboard</h1>
     <p>
         Download CSV file with the end point /api/data?date=YYYY-MM-DD
     </p>
@@ -65,6 +66,19 @@ def get_csv_for_date():
         return f"No data found for {date}", 404
 
     return send_file(fullFilePath, as_attachment=True, download_name=fileName)
+
+@app.route("/api/files")
+def list_csv_files():
+    #fileName = filePrefix +str(datetime.date.today())+'.csv'
+
+    # Get all CSV files in the data/ directory
+    file_pattern = os.path.join(filePath, f"{filePrefix}_*.csv")
+    files = sorted(glob.glob(file_pattern))
+
+    # Return just the filenames (without full paths)
+    filenames = [os.path.basename(f) for f in files]
+
+    return jsonify(filenames)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
