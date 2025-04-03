@@ -58,7 +58,7 @@ def get_csv_for_date():
         return "Please provide a date using ?date=YYYY-MM-DD", 400
 
     fileName = filePrefix +str(datetime.date.today())+'.csv'
-    filePath = os.path(fileName)
+    filePath = fileName #os.path.join(fileName)
 
     if not os.path.exists(filePath):
         return f"No data found for {date}", 404

@@ -12,3 +12,10 @@ See Google Doc for log info.
 ## Troubleshooting
 
 To find RPi IPs, log in to WAP via browser
+
+
+## To do
+
+check daily file size to storage capacity
+laptop to pull and archive files
+remote access or posting... git?
