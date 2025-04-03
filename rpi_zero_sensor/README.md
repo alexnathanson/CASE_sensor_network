@@ -8,8 +8,9 @@ Enable I2C
 Clone repository
 `git clone https://github.com/alexnathanson/CASE_sensor_network.git`
 
-Create data directory
+Create data directory and assign ownership
 `mkdir /home/case/data`
+`sudo chown case:case /home/case/data`
 
 Create venv
 `python -m venv venv`

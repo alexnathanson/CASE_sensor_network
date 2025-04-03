@@ -12,6 +12,8 @@ sensor = adafruit_sht31d.SHT31D(i2c)
 
 sensor.mode = adafruit_sht31d.MODE_SINGLE
 
+deviceNum = 1
+
 # convert celcius to farenheit
 def cToF(c):
 	return c * (9/5) + 32
@@ -37,7 +39,7 @@ def main():
 
 		# create a new file daily to save data
 		# or append if the file already exists
-		fileName = 'data/'+str(datetime.date.today())+'.csv'
+		fileName = 'data/sensor' + deviceNum + '_'+str(datetime.date.today())+'.csv'
 
 		try:
 			with open(fileName) as csvfile:
