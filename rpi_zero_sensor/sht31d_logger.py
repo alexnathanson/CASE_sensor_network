@@ -51,22 +51,8 @@ def main():
 			print(e)
 			newDF.to_csv(fileName, sep=',',index=False)
 
-		time.sleep(60)
+		#collect data every 5 minutes
+		time.sleep(60*5)
 
 if __name__ == "__main__":
 	main()
-	# Suppress FutureWarnings
-	# import warnings
-
-	# warnings.simplefilter("ignore", FutureWarning)
-
-	# Setup signal handlers for graceful shutdown
-	# signal.signal(signal.SIGINT, handle_signal)
-	# signal.signal(signal.SIGTERM, handle_signal)
-
-	# try:
-	# 	asyncio.run(main(location))
-	# except KeyboardInterrupt:
-	# 	log_info("Script interrupted by user via KeyboardInterrupt.")
-	# except Exception as e:
-	# 	log_error(f"Unexpected error in main: {e}")

@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 deviceNum = 1
-filePath = 'data/'
+filePath = '/home/case/data/'
 filePrefix = 'sensor' + str(deviceNum) + '_'
 
 HTML = """
@@ -14,7 +14,7 @@ HTML = """
 <html>
 <head>
     <title>Pi Sensor Dashboard</title>
-    <meta http-equiv="refresh" content="10" />
+    <meta http-equiv="refresh" content="60" />
     <style>
         body { font-family: sans-serif; margin: 2em; }
         table { border-collapse: collapse; }
@@ -37,7 +37,7 @@ HTML = """
         </tr>
         {% endfor %}
     </table>
-    <p>Auto-refreshes every 10 seconds</p>
+    <p>Auto-refreshes every 60 seconds</p>
 </body>
 </html>
 """
@@ -64,13 +64,7 @@ def get_csv_for_date():
     if not os.path.exists(fullFilePath):
         return f"No data found for {date}", 404
 
-    return send_file(filePath, as_attachment=True, download_name=fileName)
-
-# def get_latest_csv():
-#     # Optional helper to auto-detect latest log file
-#     import glob
-#     files = sorted(glob.glob(os.path.join(DATA_DIR, "sht31d_data_*.csv")), reverse=True)
-#     return files[0] if files else None
+    return send_file(fullFilePath, as_attachment=True, download_name=fileName)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
