@@ -6,7 +6,7 @@ import glob
 import json
 
 
-with open("config.json") as f:
+with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
 
 deviceNum = config["sensor"]["number"]
