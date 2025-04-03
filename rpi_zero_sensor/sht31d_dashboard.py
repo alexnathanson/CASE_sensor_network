@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 deviceNum = 1
-fileName = 'data/sensor' + str(deviceNum) + '_'+str(datetime.date.today())+'.csv'
+filePrefix = 'data/sensor' + str(deviceNum) + '_'
 
 HTML = """
 <!DOCTYPE html>
@@ -43,6 +43,7 @@ HTML = """
 
 @app.route("/")
 def index():
+    fileName = filePrefix +str(datetime.date.today())+'.csv'
     with open(fileName, newline='') as f:
         reader = csv.reader(f)
         next(reader)  # skip header
@@ -56,19 +57,19 @@ def get_csv_for_date():
     if not date:
         return "Please provide a date using ?date=YYYY-MM-DD", 400
 
-    filename = f"sht31d_data_{date}.csv"
-    filepath = os.path.join(DATA_DIR, filename)
+    fileName = filePrefix +str(datetime.date.today())+'.csv'
+    filePath = os.path(fileName)
 
-    if not os.path.exists(filepath):
+    if not os.path.exists(filePath):
         return f"No data found for {date}", 404
 
-    return send_file(filepath, as_attachment=True, download_name=filename)
+    return send_file(filePath, as_attachment=True, download_name=fileName)
 
-def get_latest_csv():
-    # Optional helper to auto-detect latest log file
-    import glob
-    files = sorted(glob.glob(os.path.join(DATA_DIR, "sht31d_data_*.csv")), reverse=True)
-    return files[0] if files else None
+# def get_latest_csv():
+#     # Optional helper to auto-detect latest log file
+#     import glob
+#     files = sorted(glob.glob(os.path.join(DATA_DIR, "sht31d_data_*.csv")), reverse=True)
+#     return files[0] if files else None
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
