@@ -3,10 +3,16 @@ import csv
 import datetime
 import os 
 import glob
+import json
+
+
+with open("config.json") as f:
+    config = json.load(f)
+
+deviceNum = config["sensor"]["number"]
 
 app = Flask(__name__)
 
-deviceNum = 1
 filePath = '/home/case/data/'
 filePrefix = 'sensor' + str(deviceNum) + '_'
 
@@ -99,6 +105,6 @@ def get_disk_usage():
         "free_mb": free_mb,
         "percent_used": percent_used
     })
-    
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)

@@ -19,4 +19,3 @@ check daily file size to storage capacity
 laptop to pull and archive files
 remote access or posting... git?
 ENV VARs via config
-api returns file list

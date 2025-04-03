@@ -18,6 +18,9 @@ Create venv
 Activate venv
 `source venv/bin/activate`
 
+Set sensor number
+`sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
+
 #### Install libraries
 
 Install from requirements.txt
@@ -54,6 +57,9 @@ Dashboard Automation:
 `sudo systemctl enable sht31d_dashboard.service`
 `sudo systemctl start sht31d_dashboard.service`
 
+Set daily reboot
+`sudo crontab -e`<br>
+Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
 
 ## SHT31-D Sensor Wiring
 ![image](https://cdn-learn.adafruit.com/assets/assets/000/101/432/medium640/adafruit_products_SHT31_RasPi_breadboard_bb.jpg?1618427246)

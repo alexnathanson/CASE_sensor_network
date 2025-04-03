@@ -5,14 +5,18 @@ import csv
 import os
 import pandas as pd
 import datetime
-#import signal
+import json
+
+
+with open("config.json") as f:
+    config = json.load(f)
+
+deviceNum = config["sensor"]["number"]
 
 i2c = board.I2C() # this also works
 sensor = adafruit_sht31d.SHT31D(i2c)
 
 sensor.mode = adafruit_sht31d.MODE_SINGLE
-
-deviceNum = 1
 
 # convert celcius to farenheit
 def cToF(c):
