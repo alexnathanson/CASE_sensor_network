@@ -6,7 +6,8 @@ import os
 app = Flask(__name__)
 
 deviceNum = 1
-filePrefix = 'data/sensor' + str(deviceNum) + '_'
+filePath = 'data/'
+filePrefix = 'sensor' + str(deviceNum) + '_'
 
 HTML = """
 <!DOCTYPE html>
@@ -43,7 +44,7 @@ HTML = """
 
 @app.route("/")
 def index():
-    fileName = filePrefix +str(datetime.date.today())+'.csv'
+    fileName = filePath + filePrefix +str(datetime.date.today())+'.csv'
     with open(fileName, newline='') as f:
         reader = csv.reader(f)
         next(reader)  # skip header
@@ -58,9 +59,9 @@ def get_csv_for_date():
         return "Please provide a date using ?date=YYYY-MM-DD", 400
 
     fileName = filePrefix +str(datetime.date.today())+'.csv'
-    filePath = fileName #os.path.join(fileName)
+    fullFilePath = filePath + fileName #os.path.join(fileName)
 
-    if not os.path.exists(filePath):
+    if not os.path.exists(fullFilePath):
         return f"No data found for {date}", 404
 
     return send_file(filePath, as_attachment=True, download_name=fileName)
