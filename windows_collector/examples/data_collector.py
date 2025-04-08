@@ -1,6 +1,9 @@
 import requests
 import datetime
+import os
+import json
 
+# RPi Sensor Host Names
 hostNames = []
 
 for s in range(1,9):

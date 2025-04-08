@@ -31,7 +31,8 @@ HTML = """
 <body>
     <h1>Pi Zero W2 SHT31D Sensor Dashboard</h1>
     <p>
-        Download CSV file with the end point /api/data?date=YYYY-MM-DD
+        Download CSV file with /api/data?date=YYYY-MM-DD<br>
+        View file list with /api/files
     </p>
     <table>
         <tr><th>Timestamp</th><th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th></tr>
