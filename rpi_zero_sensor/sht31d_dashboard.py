@@ -1,4 +1,5 @@
 from flask import Flask, render_template_string, request, send_file, abort, jsonify
+from flask_cors import CORS
 import csv
 import datetime
 import os 
@@ -12,6 +13,10 @@ with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
 deviceNum = config["sensor"]["number"]
 
 app = Flask(__name__)
+
+# CORS is enabled for all routes. This simplifies the frontend visualization,
+# but could be removed for security purposes or to more easily enforce throttling without straining the Pi Zeros.
+CORS(app)  
 
 filePath = '/home/case/data/'
 filePrefix = 'sensor' + str(deviceNum) + '_'
