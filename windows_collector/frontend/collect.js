@@ -1,3 +1,7 @@
+// Refresh every 5 minutes (300000 milliseconds)
+setTimeout(() => {
+  window.location.reload();
+}, 300000); // 5 minutes
 
 let apiEndpoints = []
 

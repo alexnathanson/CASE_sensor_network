@@ -11,6 +11,14 @@ There is also a JS frontend that can visualize data from sensor on the LAN.
 
 ## Installation
 
+`git clone https://github.com/alexnathanson/CASE_sensor_network`
+
+`python -m venv venv`
+
+`venv\Scripts\activate`
+
+`pip install -r requirements.txt`
+
 ### Kasa
 
 For some reason, the Kasa library wasn't working when install with pip, so it needed to be installed from git.

@@ -19,7 +19,7 @@ Note that it is crucial that the host name of each Pi is unique and follows the 
 * Enable I2C
 * Don't overlay file system
 * Localization
-	* enable US.UTF-8
+	* enable US.UTF-8 (optionally, removing GB will free up a little space)
 	* set timezone to NY
 	* set WLAN to US
 * Expand filesystem
@@ -45,16 +45,17 @@ Set sensor number<br>
 Install from requirements.txt
 `pip install -r requirements.txt`
 
-If that fails, install manually:
+If that fails, install manually via pip:
 
 * SHT31-D sensor library https://github.com/adafruit/Adafruit_CircuitPython_SHT31D
 	* `pip install adafruit-circuitpython-sht31d`
 * `pip install pandas`
 
+
 #### Automate
 
 Make script executable
-`chmod +x /home/case/CASE_sensor_network/sht31d_logger.py`
+`chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py`
 
 Copy service file
 `sudo cp sh31d_logger.service /etc/systemd/system/sht31d_logger.service`
@@ -69,7 +70,7 @@ Check if its running
 `sudo systemctl status sht31d_logger.service`
 
 Dashboard Automation:
-`chmod +x /home/case/CASE_sensor_network/sht31d_dashboard.py`
+`chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py`
 `sudo cp sh31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service`
 `sudo systemctl daemon-reexec`
 `sudo systemctl daemon-reload`
