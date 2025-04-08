@@ -11,7 +11,18 @@ Note that it is crucial that the host name of each Pi is unique and follows the 
 ## OS and Software Installation
 
 ### Pi Setup
-Enable I2C
+`sudo apt-get update`
+
+`sudo apt-get upgrade`
+
+`sudo raspi-config`
+* Enable I2C
+* Don't overlay file system
+* Localization
+	* enable US.UTF-8
+	* set timezone to NY
+	* set WLAN to US
+* Expand filesystem
 
 Clone repository
 `git clone https://github.com/alexnathanson/CASE_sensor_network.git`
@@ -20,13 +31,13 @@ Create data directory and assign ownership
 `mkdir /home/case/data`
 `sudo chown case:case /home/case/data`
 
-Create venv
+Create venv in user directory<br>
 `python -m venv venv`
 
-Activate venv
+Activate venv<br>
 `source venv/bin/activate`
 
-Set sensor number
+Set sensor number<br>
 `sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
 
 #### Install libraries
