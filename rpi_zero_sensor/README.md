@@ -1,5 +1,13 @@
 # RPi Zero W2 Installation
 
+There are 2 Python scripts that need to be installed as services to run automatically on the RPi Zero sensors:
+* logger
+* dashboard
+
+Logger collects the data and stores it as a CSV. Dashboard makes the data available via an API.
+
+Note that it is crucial that the host name of each Pi is unique and follows the naming convention. Also, the config file should be updated with the correct number.
+
 ## OS and Software Installation
 
 ### Pi Setup
@@ -57,7 +65,7 @@ Dashboard Automation:
 `sudo systemctl enable sht31d_dashboard.service`
 `sudo systemctl start sht31d_dashboard.service`
 
-Set daily reboot
+Set daily reboot at 3am
 `sudo crontab -e`<br>
 Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
 

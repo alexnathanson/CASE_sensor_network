@@ -28,7 +28,7 @@ To find RPi IPs, log in to WAP via browser
 
 ## To do
 
-check daily file size to storage capacity
-laptop to pull and archive files
+SIMPLIFY setting up PIs with custom configs????
+test - laptop to pull and archive files
 remote access or posting... git?
 look into Bonjour on windows to deal with host names

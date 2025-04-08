@@ -4,7 +4,7 @@ import datetime
 import os 
 import glob
 import json
-
+import pandas
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
@@ -64,15 +64,38 @@ def index():
 def get_csv_for_date():
     date = request.args.get("date")
     if not date:
-        return "Please provide a date using ?date=YYYY-MM-DD", 400
+        return "Please provide a date using ?date=YYYY-MM-DD or ?date=now for most recent data", 400
 
-    fileName = filePrefix +str(datetime.date.today())+'.csv'
-    fullFilePath = filePath + fileName #os.path.join(fileName)
+    if date == 'now':
+        pass
+        try:
+            fileName = filePrefix +str(datetime.date.today())+'.csv'
+            fullFilePath = filePath + fileName #os.path.join(fileName)
+            df = pd.read_csv(fullFilePath)  # Update path as needed
 
-    if not os.path.exists(fullFilePath):
-        return f"No data found for {date}", 404
+            if df.empty:
+                return jsonify({'error': 'CSV is empty'}), 404
 
-    return send_file(fullFilePath, as_attachment=True, download_name=fileName)
+            last_row = df.iloc[-1].to_dict()
+            return jsonify(last_row)
+        except FileNotFoundError:
+            return jsonify({'error': 'CSV file not found'}), 404
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    else:
+        # untested
+        # test = date.split('-')
+        # for i in test:
+        #     if type(i) != int:
+        #         return "Please provide a date using ?date=YYYY-MM-DD or use ?date=now for most recent data", 400
+
+        fileName = filePrefix +date+'.csv'
+        fullFilePath = filePath + fileName #os.path.join(fileName)
+
+        if not os.path.exists(fullFilePath):
+            return f"No data found for {date}", 404
+
+        return send_file(fullFilePath, as_attachment=True, download_name=fileName)
 
 @app.route("/api/files")
 def list_csv_files():
