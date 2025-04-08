@@ -4,7 +4,7 @@ import datetime
 import os 
 import glob
 import json
-import pandas
+import pandas as pd
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
