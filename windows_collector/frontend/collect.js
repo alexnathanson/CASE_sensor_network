@@ -32,7 +32,7 @@ async function fetchAndDisplayData() {
             errorEl.className = 'result';
             errorEl.innerHTML = `<strong>${url}</strong><p style="color:red;">Error: ${error.message}</p>`;
             resultsContainer.appendChild(errorEl);
-            throw err;
+            throw error;
           } else{
             await new Promise(r => setTimeout(r, delay*attempt));
           }
