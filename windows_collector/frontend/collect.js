@@ -14,7 +14,9 @@ const resultsContainer = document.getElementById('results');
 async function fetchAndDisplayData() {
   resultsContainer.innerHTML = ''; // Clear loading text
 
-  const fetchPromises = apiEndpoints.map(async (url, retries = 3, delay = 1000) => {
+  const fetchPromises = apiEndpoints.map(async (url) => {
+    let retries = 3;
+    let delay = 500;
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
         const response = await fetch(url);
@@ -34,6 +36,7 @@ async function fetchAndDisplayData() {
             resultsContainer.appendChild(errorEl);
             throw error;
           } else{
+            //console.log(attempt + ": " + url)
             await new Promise(r => setTimeout(r, delay*attempt));
           }
       }
