@@ -1,5 +1,6 @@
 {
   "sensor": {
-    "number": 0
+    "number": 0,
+    "location":""
   }
 }

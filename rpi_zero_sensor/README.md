@@ -92,3 +92,7 @@ Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
 Stop (temporary) or disable (doesn't start on boot) Service
 sudo systemctl stop sht31d_logger.service
 sudo systemctl disable sht31d_logger.service
+
+### Disk Space
+
+Once everything is installed, a 32GB microSD card starts at about 25% full. Check the disk status via the API.

@@ -28,7 +28,13 @@ To find RPi IPs, log in to WAP via browser
 
 ## To do
 
-SIMPLIFY setting up PIs with custom configs????
-test - laptop to pull and archive files
+automate and make resilient
 remote access or posting... git?
-look into Bonjour on windows to deal with host names
+look into Bonjour on windows to deal with host names?
+pscp files to... somewhere?
+
+quality/ health check
+* check free disk space
+* check files exist
+* check file sizes
+* spot check amount of rows and data validation

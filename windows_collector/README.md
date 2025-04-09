@@ -26,3 +26,14 @@ For some reason, the Kasa library wasn't working when install with pip, so it ne
 `git clone https://github.com/python-kasa/python-kasa.git`
 `cd python-kasa/`
 `pip install .`
+
+## Automation
+
+The python scripts are run via Windows Task Scheduler
+
+* Name the task
+* Set the trigger to daily
+* set the script tp the python.exe file in your venv
+* add the script's full filepath as an argument
+
+Make sure it is set to run whether user is logged in or not
