@@ -31,9 +31,17 @@ For some reason, the Kasa library wasn't working when install with pip, so it ne
 
 The python scripts are run via Windows Task Scheduler
 
+General
 * Name the task
-* Set the trigger to daily
+* Set to run whether user is logged in or not
+Triggers
+* Set to daily
+Actions
 * set the script tp the python.exe file in your venv
 * add the script's full filepath as an argument
+* start in specifies the directory it starts from
+Conditions
+* don't depend on the network connect...
+Settings
+* run task as soon as possible
 
-Make sure it is set to run whether user is logged in or not
