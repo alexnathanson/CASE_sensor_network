@@ -48,10 +48,10 @@ fi
 
 chown case:case /home/case/data
 
-cd /home/case/CASE_sensor_network
+cd /home/case
 
 # Check if destination already exists
-if [ -d "venv" ]; then
+if [ -d "/home/case/venv" ]; then
     echo "venv already exists. Skipping create venv."
 else
 	python -m venv venv

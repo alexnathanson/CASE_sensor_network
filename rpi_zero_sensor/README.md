@@ -49,6 +49,7 @@ Create data directory and assign ownership<br>
 `sudo chown case:case /home/case/data`
 
 Create venv in user directory<br>
+`cd /home/case<br>`
 `python -m venv venv`
 
 Activate venv<br>
