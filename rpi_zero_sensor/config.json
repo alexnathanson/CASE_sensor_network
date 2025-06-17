@@ -1,6 +1,7 @@
 {
   "sensor": {
     "number": 0,
-    "location":""
+    "location":"",
+    "frequency":""
   }
 }

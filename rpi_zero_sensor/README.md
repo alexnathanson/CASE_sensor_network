@@ -31,6 +31,15 @@ See credentials doc for username, password, and network setting to use.
 	* set WLAN to US
 * Expand filesystem
 
+
+Set sensor number<br>
+`sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
+
+
+### Automated Installation via utilities/install_automation.sh
+`sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/install.sh`
+
+#### Setup Directories
 Clone repository<br>
 `git clone https://github.com/alexnathanson/CASE_sensor_network.git`
 
@@ -43,11 +52,6 @@ Create venv in user directory<br>
 
 Activate venv<br>
 `source venv/bin/activate`
-
-Set sensor number<br>
-`sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
-
-### Automated Installation via utilities/install_automation.sh
 
 #### Install libraries
 
@@ -83,15 +87,15 @@ Dashboard Automation:<br>
 `sudo systemctl enable sht31d_dashboard.service`<br>
 `sudo systemctl start sht31d_dashboard.service`
 
-#### Back to manual installation
+Set daily reboot at 3am (run manually - not installed automatically)<br>
+`sudo crontab -e`<br>
+Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
+
+#### To confirm successful installation
 
 After running automation installer, check if they are running<br>
 `sudo systemctl status sht31d_logger.service`
 `sudo systemctl status sht31d_dashboard.service`
-
-Set daily reboot at 3am (run manually - not installed automatically)<br>
-`sudo crontab -e`<br>
-Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
 
 ## SHT31-D Sensor Wiring
 ![image](https://cdn-learn.adafruit.com/assets/assets/000/101/432/medium640/adafruit_products_SHT31_RasPi_breadboard_bb.jpg?1618427246)
