@@ -10,6 +10,13 @@ Note that it is crucial that the host name of each Pi is unique and follows the 
 
 ## OS and Software Installation
 
+### Pi Imager Settings
+
+It is crucial that the host name of each Pi is unique and follows the naming convention, pi + integer. There are 8 sensors, so the range of numbers is 1-8.<br>
+hostname: pi[#1-8].local
+
+See credentials doc for username, password, and network setting to use.
+
 ### Pi Setup
 `sudo apt-get update`
 
@@ -24,11 +31,11 @@ Note that it is crucial that the host name of each Pi is unique and follows the 
 	* set WLAN to US
 * Expand filesystem
 
-Clone repository
+Clone repository<br>
 `git clone https://github.com/alexnathanson/CASE_sensor_network.git`
 
-Create data directory and assign ownership
-`mkdir /home/case/data`
+Create data directory and assign ownership<br>
+`mkdir /home/case/data`<br>
 `sudo chown case:case /home/case/data`
 
 Create venv in user directory<br>
@@ -54,30 +61,33 @@ If that fails, install manually via pip:
 
 #### Automate
 
-Make script executable
+The following lines can be run automatically via utilities/install_automation.sh
+
+Make script executable<br>
 `chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py`
 
-Copy service file
+Copy service file<br>
 `sudo cp sh31d_logger.service /etc/systemd/system/sht31d_logger.service`
 
-Reload and enable
-`sudo systemctl daemon-reexec`
-`sudo systemctl daemon-reload`
-`sudo systemctl enable sht31d_logger.service`
+Reload and enable<br>
+`sudo systemctl daemon-reexec`<br>
+`sudo systemctl daemon-reload`<br>
+`sudo systemctl enable sht31d_logger.service`<br>
 `sudo systemctl start sht31d_logger.service`
 
-Check if its running
-`sudo systemctl status sht31d_logger.service`
-
-Dashboard Automation:
-`chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py`
-`sudo cp sh31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service`
-`sudo systemctl daemon-reexec`
-`sudo systemctl daemon-reload`
-`sudo systemctl enable sht31d_dashboard.service`
+Dashboard Automation:<br>
+`chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py`<br>
+`sudo cp sh31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service`<br>
+`sudo systemctl daemon-reexec`<br>
+`sudo systemctl daemon-reload`<br>
+`sudo systemctl enable sht31d_dashboard.service`<br>
 `sudo systemctl start sht31d_dashboard.service`
 
-Set daily reboot at 3am
+After running automation installer, check if they are running<br>
+`sudo systemctl status sht31d_logger.service`
+`sudo systemctl status sht31d_dashboard.service`
+
+Set daily reboot at 3am (run manually - not installed automatically)<br>
 `sudo crontab -e`<br>
 Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
 
@@ -89,9 +99,9 @@ Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
 ### Logs
 `journalctl -u sht31d_logger.service -f`
 
-Stop (temporary) or disable (doesn't start on boot) Service
-sudo systemctl stop sht31d_logger.service
-sudo systemctl disable sht31d_logger.service
+Stop (temporary) or disable (doesn't start on boot) Service<br>
+`sudo systemctl stop sht31d_logger.service`<br>
+`sudo systemctl disable sht31d_logger.service`
 
 ### Disk Space
 
