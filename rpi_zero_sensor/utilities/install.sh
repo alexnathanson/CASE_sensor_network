@@ -1,15 +1,18 @@
 #!/bin/bash
 
-#cd /home/case
-REPO="https://github.com/alexnathanson/CASE_sensor_network.git"
+REPO_URL="https://github.com/alexnathanson/CASE_sensor_network.git"
 REPO_DST="/home/case"
+REPO_DIR="/home/case/CASE_sensor_network"
+DATA_DIR="/home/case/data"
+CONFIG="/home/case/CASE_sensor_network/rpi_zero_sensor/config.json"
+CONFIG_TEMP="/home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json"
 
 # Check if destination already exists
-if [ -d "$DEST_DIR" ]; then
-    echo "Directory '$DEST_DIR' already exists. Skipping clone."
+if [ -d "$REPO_DIR" ]; then
+    echo "Directory '$REPO_DIR' already exists. Skipping clone."
 else
-    echo "Cloning $REPO_URL into $DEST_DIR..."
-    git clone "$REPO_URL" "$DEST_DIR"
+    echo "Cloning $REPO_URL into $REPO_DST..."
+    git clone "$REPO_URL" "$REPO_DST"
     if [ $? -eq 0 ]; then
         echo "Repository cloned successfully."
     else
@@ -27,8 +30,7 @@ echo "Sensor #$SENSOR_NUM"
 
 
 # File to modify
-CONFIG="/home/case/CASE_sensor_network/rpi_zero_sensor/config.json"
-sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json "$CONFIG"
+sudo cp "$CONFIG_TEMP" "$CONFIG"
 
 # Replace the line in the file
 sed -i "s/\"number\": *[0-9]\+,/\"number\": $SENSOR_NUM,/" "$CONFIG"
@@ -36,12 +38,13 @@ sed -i "s/\"number\": *[0-9]\+,/\"number\": $SENSOR_NUM,/" "$CONFIG"
 echo "Updated 'number' to $SENSOR_NUM in $CONFIG."
 
 
-DATA_DIR="/home/case/data"
 # Check if destination already exists
 if [ -d "$DATA_DIR" ]; then
     echo "Directory '$DATA_DIR' already exists. Skipping mkdir."
 else
 	mkdir "$DATA_DIR"
+	echo "Created data directory"
+fi
 
 chown case:case /home/case/data
 
@@ -52,6 +55,7 @@ if [ -d "venv" ]; then
     echo "venv already exists. Skipping create venv."
 else
 	python -m venv venv
+fi
 
 source venv/bin/activate
 
@@ -76,7 +80,7 @@ systemctl daemon-reexec
 sudo systemctl daemon-reload
 systemctl enable sht31d_dashboard.service
 systemctl start sht31d_dashboard.service
-echo "Dashbaord service installed"
+echo "Dashboard service installed"
 
 
 # Line to add
