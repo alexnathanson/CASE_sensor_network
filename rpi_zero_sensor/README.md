@@ -33,6 +33,7 @@ See credentials doc for username, password, and network setting to use.
 
 
 Set sensor number<br>
+`sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
 `sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
 
 

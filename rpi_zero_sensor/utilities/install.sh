@@ -18,6 +18,24 @@ else
     fi
 fi
 
+# Get the hostname
+HOSTNAME_STR=$(hostname)
+
+# Remove the string 'pi' from the hostname
+SENSOR_NUM=${HOSTNAME_STR//pi/}
+echo "Sensor #$SENSOR_NUM"
+
+
+# File to modify
+CONFIG="/home/case/CASE_sensor_network/rpi_zero_sensor/config.json"
+sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json "$CONFIG"
+
+# Replace the line in the file
+sed -i "s/\"number\": *[0-9]\+,/\"number\": $SENSOR_NUM,/" "$CONFIG"
+
+echo "Updated 'number' to $SENSOR_NUM in $CONFIG."
+
+
 DATA_DIR="/home/case/data"
 # Check if destination already exists
 if [ -d "$DATA_DIR" ]; then
