@@ -47,6 +47,8 @@ Activate venv<br>
 Set sensor number<br>
 `sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
 
+### Automated Installation via utilities/install_automation.sh
+
 #### Install libraries
 
 Install from requirements.txt
@@ -60,8 +62,6 @@ If that fails, install manually via pip:
 
 
 #### Automate
-
-The following lines can be run automatically via utilities/install_automation.sh
 
 Make script executable<br>
 `chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py`
@@ -82,6 +82,8 @@ Dashboard Automation:<br>
 `sudo systemctl daemon-reload`<br>
 `sudo systemctl enable sht31d_dashboard.service`<br>
 `sudo systemctl start sht31d_dashboard.service`
+
+#### Back to manual installation
 
 After running automation installer, check if they are running<br>
 `sudo systemctl status sht31d_logger.service`
