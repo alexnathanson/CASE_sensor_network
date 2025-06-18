@@ -48,11 +48,11 @@ Create data directory and assign ownership<br>
 
 
 Copy config and set sensor number<br>
-`sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
+`sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`<br>
 `sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
 
 Create venv in user directory<br>
-`cd /home/case<br>`
+`cd /home/case<br>`<br>
 `python -m venv venv`
 
 Activate venv<br>
@@ -60,7 +60,7 @@ Activate venv<br>
 
 #### Install libraries
 
-Install from requirements.txt
+Install from requirements.txt<br>
 `pip install -r requirements.txt`
 
 If that fails, install manually via pip:
