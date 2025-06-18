@@ -35,7 +35,7 @@ sudo cp "$CONFIG_TEMP" "$CONFIG"
 # Replace the line in the file
 sed -i "s/\"number\": *[0-9]\+,/\"number\": $SENSOR_NUM,/" "$CONFIG"
 
-echo "Updated 'number' to $SENSOR_NUM in $CONFIG."
+echo "Updated 'sensor number' to $SENSOR_NUM in $CONFIG."
 
 
 # Check if destination already exists

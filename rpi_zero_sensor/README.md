@@ -31,22 +31,25 @@ See credentials doc for username, password, and network setting to use.
 	* set WLAN to US
 * Expand filesystem
 
-
-Set sensor number<br>
-`sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
-`sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
-
-
-### Automated Installation via utilities/install_automation.sh
-`sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/install.sh`
-
-#### Setup Directories
 Clone repository<br>
 `git clone https://github.com/alexnathanson/CASE_sensor_network.git`
+
+Run automated installer script:<br>
+`sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/installer.sh`
+
+### Steps included in automated installation via utilities/installer.sh
+The following code does not need to be done manually, because it is included in script.
+
+#### Setup Directories
 
 Create data directory and assign ownership<br>
 `mkdir /home/case/data`<br>
 `sudo chown case:case /home/case/data`
+
+
+Copy config and set sensor number<br>
+`sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
+`sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
 
 Create venv in user directory<br>
 `cd /home/case<br>`
@@ -96,7 +99,7 @@ Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
 #### To confirm successful installation
 
 After running automation installer, check if they are running<br>
-`sudo systemctl status sht31d_logger.service`
+`sudo systemctl status sht31d_logger.service`<br>
 `sudo systemctl status sht31d_dashboard.service`
 
 ## SHT31-D Sensor Wiring
