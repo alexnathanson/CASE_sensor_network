@@ -17,14 +17,18 @@ There is also a JS frontend that can visualize data from sensor on the LAN.
 
 `venv\Scripts\activate`
 
+Install requirements from windows_collector directory<br>
 `pip install -r requirements.txt`
 
 ### Kasa
 
-For some reason, the Kasa library wasn't working when install with pip, so it needed to be installed from git.
+To connect the Kasa devices to the network, you need to connect to them first via the Kasa app.
 
-`git clone https://github.com/python-kasa/python-kasa.git`
-`cd python-kasa/`
+Devices are named kasa1 - kasa4
+
+If for some reason, the Kasa library wasn't working when install with pip, so it needed to be installed from git.<br>
+`git clone https://github.com/python-kasa/python-kasa.git`<br>
+`cd python-kasa/`<br>
 `pip install .`
 
 ## Automation

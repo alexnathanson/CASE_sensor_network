@@ -1,5 +1,6 @@
 # Frontend
 
+This is front-end stuff only. To run, navigate to directory and spin up server.
 
 ## Plots
 

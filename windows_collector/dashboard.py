@@ -120,4 +120,5 @@ def list_files():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    await main()
+    #await main()
+    asyncio.run(main())

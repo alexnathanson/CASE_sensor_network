@@ -3,11 +3,18 @@
 import asyncio
 from kasa import Discover, Credentials
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+un = os.getenv('KASA_UN')
+pw = os.getenv('KASA_PW')
+
 async def discoverSingle():
     #discover a single specific device
     device = await Discover.discover_single(
         "127.0.0.1",
-        credentials=Credentials("myusername", "mypassword"),
+        credentials=Credentials(un, pw),
         discovery_timeout=10
     )
 
@@ -17,13 +24,18 @@ async def discoverSingle():
 async def discoverAll():
     #discover all available devices
     devices = await Discover.discover(
-        credentials=Credentials("myusername", "mypassword"),
+        credentials=Credentials(un, pw),
         discovery_timeout=10
     )
+
+    print(len(devices))
+
     for ip, device in devices.items():
         await device.update()
-        print(device.alias + " at " + device.host)
-        print(type(device))
+        print(f'{device.alias} ({device.mac}) at {device.host}')
+        print(f'{device.features}')
+        #print(f'{device.features['voltage']} and {device.features['current']}')
+        print('')
 
     return devices
 
