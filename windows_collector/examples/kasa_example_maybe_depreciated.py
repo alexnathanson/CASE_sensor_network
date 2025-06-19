@@ -34,6 +34,8 @@ async def initialize():
         for feature_id, feature in device.features.items():
             print(f"{feature.name} ({feature_id}): {feature.value}")
 
+  
+
 
     return devices
 
