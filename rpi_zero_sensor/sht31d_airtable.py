@@ -119,7 +119,6 @@ class Airtable():
             return response.json()
         else:
             logging.warning(f'{response.status_code}: {response.text}')
-            #logging.warning(f'{response.status_code}')
             return False
 
 # --------------------------------------------------- #

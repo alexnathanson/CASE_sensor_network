@@ -34,3 +34,9 @@ systemctl daemon-reload
 systemctl enable sht31d_dashboard.service
 systemctl start sht31d_dashboard.service
 echo "dashboard restarted"
+
+systemctl daemon-reexec
+systemctl daemon-reload
+systemctl enable sht31d_airtable.service
+systemctl start sht31d_airtable.service
+echo "airtable restarted"

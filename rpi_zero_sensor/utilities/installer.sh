@@ -82,6 +82,15 @@ systemctl enable sht31d_dashboard.service
 systemctl start sht31d_dashboard.service
 echo "Dashboard service installed"
 
+chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_airtable.py
+
+cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.service /etc/systemd/system/sht31d_airtable.service
+systemctl daemon-reexec
+sudo systemctl daemon-reload
+systemctl enable sht31d_airtable.service
+systemctl start sht31d_airtable.service
+echo "Airtable service installed"
+
 
 # Line to add
 CRON_JOB="0 3 * * * /sbin/reboot"
