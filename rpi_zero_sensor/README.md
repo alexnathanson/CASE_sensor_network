@@ -37,6 +37,10 @@ Clone repository<br>
 Run automated installer script:<br>
 `sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/installer.sh`
 
+Create .env file
+* In rpi_zero_sensor directory: `sudo nano .env`
+* add this line  `AIRTABLE=API_KEY` replace API_KEY with actual key.
+
 ### Steps included in automated installation via utilities/installer.sh
 The following code does not need to be done manually, because it is included in script.
 

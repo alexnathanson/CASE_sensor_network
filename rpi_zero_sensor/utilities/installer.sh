@@ -84,7 +84,7 @@ echo "Dashboard service installed"
 
 chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_airtable.py
 
-cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.service /etc/systemd/system/sht31d_airtable.service
+cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_airtable.service /etc/systemd/system/sht31d_airtable.service
 systemctl daemon-reexec
 sudo systemctl daemon-reload
 systemctl enable sht31d_airtable.service
