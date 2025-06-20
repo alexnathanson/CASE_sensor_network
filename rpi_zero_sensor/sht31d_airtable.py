@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional, List
 
 
 # ------------------ Config ------------------ #
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 #LOG_FILENAME = "kasa_log.log"
 
 load_dotenv()
