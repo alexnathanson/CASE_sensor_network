@@ -23,6 +23,19 @@ else
     fi
 fi
 
+cd /home/case
+# Check if destination already exists
+if [ -d "/home/case/venv" ]; then
+    echo "venv already exists. Skipping create venv."
+else
+    python -m venv venv
+fi
+
+source venv/bin/activate
+pip install -r /home/case/CASE_sensor_network/rpi_zero_sensor/requirements.txt
+echo "Python requirements installed"
+
+
 systemctl daemon-reexec
 systemctl daemon-reload
 systemctl enable sht31d_logger.service
