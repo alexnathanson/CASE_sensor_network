@@ -60,6 +60,10 @@ fi
 source venv/bin/activate
 
 pip install -r /home/case/CASE_sensor_network/rpi_zero_sensor/requirements.txt
+
+# untested - added because creating the venv with sudo made it root
+sudo chown -R case:case /home/case/venv 
+
 echo "Python requirements installed"
 
 chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py
