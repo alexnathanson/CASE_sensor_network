@@ -1,0 +1,161 @@
+import os
+import datetime
+import json
+from dotenv import load_dotenv
+import asyncio
+import logging
+from Airtable import Airtable
+import request
+
+# ------------------ Config ------------------ #
+logging.basicConfig(level=logging.DEBUG)
+#LOG_FILENAME = "kasa_log.log"
+
+key = os.getenv('AIRTABLE')
+
+
+with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
+    config = json.load(f)
+
+deviceNum = config["sensor"]["number"]
+
+# ------------------ Airtable Class ------------------ #
+class Airtable():
+    def __init__(self, key:str, name:str=''):
+        self.key = key
+        self.url = 'https://api.airtable.com/v0/appWyfKF1xclZ6OtH/'
+        self.table = 'live'
+
+    async def update(self, name:str, data):
+        logging.debug(name)
+        try:
+            # get list of records filtered by name
+
+            mURL = f'{self.url}{self.table}?maxRecords=3&view=Grid%20view&filterByFormula=name%3D%22{name}%22' #filter results by name column
+            res = await self.send_secure_get_request(mURL)
+            logging.debug(res)
+
+            # pull the id for the first record
+            recordID = res['records'][0]['id']
+            logging.debug(recordID)
+
+            if 'kasa' in name:
+                logging.debug('kasa device!')
+                # patch record - columns not included are not changed
+                pData={"records": [{
+                    "id": str(recordID),
+                    "fields": {
+                        "name": str(f"{name}"),
+                        "datetime":str(data['datetime']),
+                        "power": str(data[f"{name}_W"])
+                        }
+                    }]}
+            elif 'sensor' in name:
+                # patch record - columns not included are not changed
+                pData={"records": [{
+                    "id": str(recordID),
+                    "fields": {
+                        "name": str(f"{name}"),
+                        "datetime":str(data['datetime']),
+                        "humidityP": str(data["humidityP"]),
+                        "tempC": str(data["tempC"]),
+                        "tempF": str(data["tempF"])
+                        }
+                    }]}
+
+            logging.debug(pData)
+
+            try:
+
+                patch_status = 0
+                while patch_status < 3:
+                    # note that patch leaves unchanged data in place, while a post would delete old data in the record even if not being updated
+                    r = await self.send_patch_request(f'{self.url}{self.table}',pData)
+                    if r != False:
+                        break
+                    await asyncio.sleep(1+patch_status)
+                    patch_status += 1
+                logging.debug(r)
+            except Exception as e:
+                logging.error(f'Exception with patching Airtable: {e}')
+        except Exception as e:
+            logging.error(f'Exception with getting Airtable records: {e}')
+
+    async def send_secure_get_request(self, url:str,type:str='json',timeout=2) -> Any:
+        """Send GET request to the IP."""
+        try:
+            headers = {"Content-Type": "application/json; charset=utf-8"}
+
+            if self.key != '':
+                headers = {"Authorization": f"Bearer {self.key}"}
+
+            response = requests.get(url, headers=headers, timeout=timeout)
+            if type == 'json':
+                return response.json()
+            elif type == 'text':
+                return (response.text, response.status_code)
+            else:
+                return response.status_code
+        except requests.Timeout as e:
+            return e
+        except Exception as e:
+            return e
+
+    async def send_patch_request(self, url:str, data:Dict={},timeout=1):
+
+        headers = {"Content-Type": "application/json; charset=utf-8"}
+
+        if self.key != '':
+            headers = {"Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {self.key}"}
+
+        response = requests.patch(url, headers=headers, json=data)
+
+        if response.ok:
+            return response.json()
+        else:
+            logging.warning(f'{response.status_code}')
+            return False
+
+# --------------------------------------------------- #
+
+async def send_get_request(url,type:str,timeout=1) -> Any:
+    """Send GET request to the IP."""
+    try:
+        response = requests.get(f"{url}", timeout=timeout)
+        if type == 'json':
+            return response.json()
+        elif type == 'text':
+            return response.text
+        else:
+            return response.status_code
+    except requests.Timeout as e:
+        return e
+    except Exception as e:
+        return e
+
+async def main():
+    AT = Airtable(key)
+
+    while True:
+        try:
+            url = "localhost:5000/api/data?date=now"
+            now = await send_get_request(url,'json')
+            logging.debug(now)
+        except Exception as e:
+            logging.error(e)
+
+
+        try:
+            await AT.update(f'sensor{deviceNum}',power_data.iloc[0])
+        except Exception as e:
+            logging.error(e)
+
+        #collect data every 5 minutes
+        await asyncio.sleep(60 * 5) 
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        logger.critical(f"Main loop crashed: {e}")

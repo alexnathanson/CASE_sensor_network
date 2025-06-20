@@ -31,6 +31,16 @@ If for some reason, the Kasa library wasn't working when install with pip, so it
 `cd python-kasa/`<br>
 `pip install .`
 
+* Download NSSM
+* Place nssm.exe in nssm folder in programs directory
+* add to environment paths
+* open temrinal as admin
+	* `nssm install KasaLogger`
+	* path is path to python.exe in venv
+	* startup directory is windows_collector\
+	* arg is path to kasa_logger.py
+	* start service with `nssm start KasaLogger`
+	* check status with task manager (might just show up as python) or `nssm status KasaLogger`
 ## Automation
 
 The python scripts are run via Windows Task Scheduler

@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import asyncio
 from kasa import Discover, Credentials
 import logging
+from Airtable import Airtable
 
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.INFO)
@@ -21,6 +22,8 @@ if not un or not pw:
     logger.error("Missing KASA_UN or KASA_PW in environment.")
     raise EnvironmentError("Missing Kasa credentials")
 
+key = os.getenv('AIRTABLE')
+
 async def discoverAll():
 
     #discover all available devices
@@ -30,7 +33,7 @@ async def discoverAll():
         )
 
     dataDF = pd.DataFrame(data={
-        "datetime" : [datetime.datetime.now()],
+        "datetime" : [datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
         "kasa1_W": "",
         "kasa2_W": "",
         "kasa3_W": "",
@@ -88,6 +91,7 @@ def archiveCSV(data):
             logging.error(f'Failed to write new CSV. {e}')
 
 async def main():
+    AT = Airtable(key)
 
     while True:
         power_data = await discoverAll()
@@ -95,7 +99,14 @@ async def main():
         logging.debug(power_data)
 
         archiveCSV(power_data)
-        
+
+        for n in power_data.keys():
+            if n != 'datetime':
+                try:
+                    await AT.update(n[:5],power_data.iloc[0])
+                except Exception as e:
+                    logging.error(e)
+
         #collect data every 5 minutes
         await asyncio.sleep(60 * 5) 
 
