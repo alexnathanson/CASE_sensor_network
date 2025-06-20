@@ -31,7 +31,7 @@ else
     python -m venv venv
 fi
 
-source venv/bin/activate
+source /home/case/venv/bin/activate
 pip install -r /home/case/CASE_sensor_network/rpi_zero_sensor/requirements.txt
 echo "Python requirements installed"
 
