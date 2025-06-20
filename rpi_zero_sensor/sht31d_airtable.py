@@ -4,13 +4,15 @@ import json
 from dotenv import load_dotenv
 import asyncio
 import logging
-from Airtable import Airtable
-import request
+import requests
+from typing import Any, Dict, Optional, List
+
 
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.DEBUG)
 #LOG_FILENAME = "kasa_log.log"
 
+load_dotenv()
 key = os.getenv('AIRTABLE')
 
 
@@ -40,7 +42,7 @@ class Airtable():
             logging.debug(recordID)
 
             if 'kasa' in name:
-                logging.debug('kasa device!')
+                logging.debug(f'{name}!')
                 # patch record - columns not included are not changed
                 pData={"records": [{
                     "id": str(recordID),
@@ -51,11 +53,13 @@ class Airtable():
                         }
                     }]}
             elif 'sensor' in name:
+                logging.debug(f'{name}!')
+
                 # patch record - columns not included are not changed
                 pData={"records": [{
                     "id": str(recordID),
                     "fields": {
-                        "name": str(f"{name}"),
+                        "name": str(name),
                         "datetime":str(data['datetime']),
                         "humidityP": str(data["humidityP"]),
                         "tempC": str(data["tempC"]),
@@ -114,7 +118,8 @@ class Airtable():
         if response.ok:
             return response.json()
         else:
-            logging.warning(f'{response.status_code}')
+            logging.warning(f'{response.status_code}: {response.text}')
+            #logging.warning(f'{response.status_code}')
             return False
 
 # --------------------------------------------------- #
@@ -139,7 +144,7 @@ async def main():
 
     while True:
         try:
-            url = "localhost:5000/api/data?date=now"
+            url = "http://localhost:5000/api/data?date=now"
             now = await send_get_request(url,'json')
             logging.debug(now)
         except Exception as e:
@@ -147,7 +152,7 @@ async def main():
 
 
         try:
-            await AT.update(f'sensor{deviceNum}',power_data.iloc[0])
+            await AT.update(f'sensor{deviceNum}',now)
         except Exception as e:
             logging.error(e)
 
