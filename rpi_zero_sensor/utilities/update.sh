@@ -40,3 +40,11 @@ systemctl daemon-reload
 systemctl enable sht31d_airtable.service
 systemctl start sht31d_airtable.service
 echo "airtable restarted"
+
+read -p "You may need to reboot for changes to take effect. Would you like to reboot? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # do dangerous stuff
+    reboot -h now
+fi
