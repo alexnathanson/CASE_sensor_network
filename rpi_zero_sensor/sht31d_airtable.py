@@ -156,7 +156,7 @@ async def main():
             logging.error(e)
 
         #collect data every 5 minutes
-        await asyncio.sleep(60 * 5) 
+        await asyncio.sleep(60 * 60 * 8)
 
 if __name__ == "__main__":
     try:
