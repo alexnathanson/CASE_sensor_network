@@ -10,6 +10,7 @@ import pandas as pd
 import logging
 import subprocess
 from typing import Any, Dict, List
+#import shutil
 #import re
 
 # ------------------ Config ------------------ #
@@ -159,7 +160,7 @@ def run_command(cmd):
     except Exception as e:
         return f"Exception: {str(e)}"
 
-def parse_timestamp(filename, startDate:str="2025-06-01", time_format:str="%Y-%m-%d",):
+def parse_timestamp(filename, startDate:str, time_format:str="%Y-%m-%d",):
     fileDate = filename.split("_")[-1].replace(".csv","")
     if fileDate and (fileDate != str(datetime.date.today())): #ignore today's file
         formattedFileDate = datetime.datetime.strptime(fileDate, time_format)
@@ -171,12 +172,12 @@ def parse_timestamp(filename, startDate:str="2025-06-01", time_format:str="%Y-%m
 def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict:
     interval_minutes=60*60*24
     file_data=[]
-
+    startDate="2025-06-01"
     for f in os.listdir(folder_path):
         try:
             full_path = os.path.join(folder_path, f)
             if os.path.isfile(full_path):
-                ts = parse_timestamp(f)
+                ts = parse_timestamp(f,startDate)
                 if ts:
                     size = os.path.getsize(full_path)
                     file_data.append((f, ts, size))
@@ -208,6 +209,7 @@ def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict
 
     return {
         "total_files": len(file_data),
+        "startDate" : startDate,
         "average_size_bytes": avg,
         "outliers": outliers,
         "missing_timestamps": [dt.strftime("%Y-%m-%d %H:%M") for dt in missing_ts],
@@ -216,16 +218,22 @@ def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict
 
 @app.route("/api/health")
 def health_check():
-
+    # any run_command can also be entered manually in terminal
     dt = datetime.datetime.now()
 
     cpu_tempC = run_command("vcgencmd measure_temp").replace('temp=','').replace("\'C","")
 
-    uptime = run_command("uptime")
+    uptime = run_command("uptime").split(',')[0]
 
-    memoryUsage = run_command("free -h")
+    availMem = run_command("free -h").split('\n')[1].split()[-1]
+    memStatus = 'OK'
+    if availMem < 50:
+        memStatus = 'VERY LOW'
+    elif availMem < 100:
+        memStatus = 'LOW'
+    memoryUsage = {'available memory':f'{availMem}Mi','status':memStatus}
 
-    diskUsage = run_command("df -h")
+    diskUsage = get_disk_usage()#run_command("df -h")
 
     throttled = run_command("vcgencmd get_throttled")
     if "0x0" in throttled:
