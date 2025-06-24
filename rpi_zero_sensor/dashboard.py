@@ -7,7 +7,7 @@ import glob
 import json
 import pandas as pd
 import logging
-
+import subprocess
 
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.INFO)
@@ -148,6 +148,47 @@ def get_disk_usage():
         "free_mb": free_mb,
         "percent_used": percent_used
     })
+
+def run_command(cmd):
+    try:
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        return result.stdout.strip() if result.returncode == 0 else f"Error: {result.stderr.strip()}"
+    except Exception as e:
+        return f"Exception: {str(e)}"
+
+@app.route("/api/health")
+def health_check():
+
+    dt = datetime.datetime.now()
+
+    cpu_temp = run_command("vcgencmd measure_temp")
+
+    uptime = run_command("uptime")
+
+    memoryUsage = run_command("free -h")
+
+    diskUsage = run_command("df -h")
+
+    throttled = run_command("vcgencmd get_throttled")
+    if "0x0" in throttled:
+        throttled = "OK"
+    else:
+        throttled = "Power supply issue or undervoltage!"
+    powerIssues = throttled
+
+    sdCardErrors = run_command("dmesg | grep mmc")
+    sdCardErrors = sdCardErrors if sdCardErrors else "No mmc errors detected."
+
+    return jsonifyReport({
+        "datetime": dt,
+        "cpu_temp": cpu_temp,
+        "uptime": uptime,
+        "memoryUsage": memoryUsage,
+        "diskUsage" : diskUsage,
+        "powerIssues" : powerIssues,
+        "sdCardErrors" : sdCardErrors
+    })
+    return jsonifyReport
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
