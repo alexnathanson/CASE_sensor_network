@@ -8,6 +8,7 @@ import json
 import pandas as pd
 import logging
 import subprocess
+from typing import Any, Dict, List
 
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.INFO)
@@ -156,12 +157,66 @@ def run_command(cmd):
     except Exception as e:
         return f"Exception: {str(e)}"
 
+def parse_timestamp(filename, pattern=r"log-(\d{8}-\d{4})", time_format="%Y%m%d-%H%M"):
+    match = re.search(pattern, filename)
+    if match:
+        return datetime.strptime(match.group(1), time_format)
+    return None
+
+def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict:
+    interval_minutes=60*60*24
+    file_data=[]
+
+    # files = [
+    #     (f, os.path.getsize(os.path.join(folder_path, f)))
+    #     for f in os.listdir(folder_path)
+    #     if os.path.isfile(os.path.join(folder_path, f))
+    # ]
+    for f in os.listdir(folder_path):
+        full_path = os.path.join(folder_path, f)
+        if os.path.isfile(full_path):
+            ts = parse_timestamp(f)
+            if ts:
+                size = os.path.getsize(full_path)
+                file_data.append((f, ts, size))
+
+    if not files:
+        return "No timestamped files found in directory."
+
+    # Sort by timestamp
+    file_data.sort(key=lambda x: x[1])
+    sizes = [size for _, size in files]
+    avg = sum(sizes) / len(sizes)
+    lower_bound = avg * (1 - tolerance_ratio)
+    upper_bound = avg * (1 + tolerance_ratio)
+
+    outliers = [(f, s) for f, s in files if s < lower_bound or s > upper_bound]
+
+    # Find missing timestamps
+    expected_ts = []
+    current = file_data[0][1]
+    end = file_data[-1][1]
+    while current <= end:
+        expected_ts.append(current)
+        current += timedelta(minutes=interval_minutes)
+
+    existing_ts = set(ts for _, ts, _ in file_data)
+    missing_ts = [dt for dt in expected_ts if dt not in existing_ts]
+
+    return {
+        "total_files": len(files),
+        "average_size_bytes": avg,
+        "outliers": outliers,
+        "missing_timestamps": [dt.strftime("%Y-%m-%d %H:%M") for dt in missing_ts],
+        "status": "OK" if not outliers and not missing_ts else "WARNING: Issues found"
+    }
+
 @app.route("/api/health")
 def health_check():
 
     dt = datetime.datetime.now()
 
-    cpu_temp = run_command("vcgencmd measure_temp")
+    cpu_tempC = run_command("vcgencmd measure_temp").replace('temp=','').replace("\'C","")
 
     uptime = run_command("uptime")
 
@@ -179,14 +234,17 @@ def health_check():
     sdCardErrors = run_command("dmesg | grep mmc")
     sdCardErrors = sdCardErrors if sdCardErrors else "No mmc errors detected."
 
+    fileStatus = check_file_size_uniformity("/home/case/data")
+
     return jsonify({
         "datetime": dt.strftime("%Y-%m-%d %H:%M:%S"),
-        "cpu_temp": cpu_temp,
+        "cpu_tempC": cpu_tempC,
         "uptime": uptime,
         "memoryUsage": memoryUsage,
         "diskUsage" : diskUsage,
         "powerIssues" : powerIssues,
-        "sdCardErrors" : sdCardErrors
+        "sdCardErrors" : sdCardErrors,
+        "fileStatus":fileStatus
     })
 
 if __name__ == "__main__":
