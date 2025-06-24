@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import asyncio
 from kasa import Discover, Credentials
 import logging
-#import pandas as pd
+import pandas as pd
 
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.INFO)
@@ -37,12 +37,12 @@ async def discoverAll():
         discovery_timeout=10
         )
 
-    data={
+    dataDF = pd.DataFrame(data={
         "datetime" : [datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
         "kasa1_W": "",
         "kasa2_W": "",
         "kasa3_W": "",
-        "kasa4_W": ""}
+        "kasa4_W": ""})
 
     logging.debug(len(devices))
 
@@ -55,13 +55,13 @@ async def discoverAll():
             # print(f'Power: {energy_module.current_consumption}W') #this library is really dumb - they use the word current to describe live power in Watts, NOT amperage
             # print('')
 
-            data['kasa'+device.alias[4]+'_W']=energy_module.current_consumption
+            dataDF['kasa'+device.alias[4]+'_W']=energy_module.current_consumption
 
             await device.disconnect()
         except Exception as e:
             logging.error(e)
 
-    return data
+    return dataDF
 
 # def archiveCSV(data):
 #      # File path to save the CSV
@@ -102,38 +102,22 @@ async def main():
 
         logging.debug(power_data)
 
-        #archiveCSV(power_data)
+        # create a new file daily to save data or append if the file already exists
+        fileName = '/home/case/data/kasa' + '_'+str(datetime.date.today())+'.csv'
 
-        #################################
-
-        # create a new file daily to save data
-        # or append if the file already exists
-        fileName = 'data/kasa' + '_'+str(datetime.date.today())+'.csv'
-
-        # try:
-        #     with open(fileName) as csvfile:
-        #         df = pd.read_csv(fileName)
-        #         df = pd.concat([df,newDF], ignore_index = True)
-        #         #df = df.append(newDF, ignore_index = True)
-        #         df.to_csv(fileName, sep=',',index=False)
-        # except Exception as e:
-        #     print(e)
-        #     newDF.to_csv(fileName, sep=',',index=False)
         try:
-            with open(fileName, mode="a", newline="") as file:
-                writer = csv.DictWriter(file, fieldnames=power_data.keys())
-                file.seek(0, 2)  # move to end of file
-                if file.tell() == 0: # check if file is new before writing headers
-                        writer.writeheader()
-
+            with open(fileName) as csvfile:
+                df = pd.read_csv(fileName)
+                df = pd.concat([df,power_data], ignore_index = True)
+                df.to_csv(fileName, sep=',',index=False)
+                logging.debug('Data appended.')
         except Exception as e:
-            logging.info(f'{e}')
-            with open(fileName, mode="w", newline="") as file:
-                writer = csv.DictWriter(file, fieldnames=power_data.keys())
-                # file.seek(0, 2)  # move to end of file
-                # if file.tell() == 0: # check if file is new before writing headers
-                writer.writeheader()
-                writer.writerow(data)
+            logging.debug(f'Failed to append CSV... trying to write new CSV. {e}')
+            try:
+                power_data.to_csv(fileName, sep=',',index=False)
+                logging.debug('New CSV created.')
+            except Exception as e:
+                logging.error(f'Failed to write new CSV. {e}')
 
         #collect data every 5 minutes
         await asyncio.sleep(60 * 5)
