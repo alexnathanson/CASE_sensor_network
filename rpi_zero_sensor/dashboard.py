@@ -159,10 +159,11 @@ def run_command(cmd):
     except Exception as e:
         return f"Exception: {str(e)}"
 
-def parse_timestamp(filename, time_format="%Y%m%d"):
-    fileDate = filename.split("_")[-1]
+def parse_timestamp(filename, time_format="%Y-%m-%d"):
+    fileDate = filename.split("_")[-1].replace(".csv","")
+    print(fileDate)
     if fileDate:
-        return datetime.strptime(fileDate, time_format)
+        return datetime.datetime.strptime(fileDate, time_format)
     return None
 
 def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict:
