@@ -8,6 +8,8 @@ Logger collects the data and stores it as a CSV. Dashboard makes the data availa
 
 Note that it is crucial that the host name of each Pi is unique and follows the naming convention. Also, the config file should be updated with the correct number.
 
+Healthcheck, Airtable, and Kasa scripts are not run on devices with SHT31-D sensors. These are run on another device, named Kasa.
+
 ## OS and Software Installation
 
 ### Pi Imager Settings
