@@ -6,6 +6,11 @@ import os
 import glob
 import json
 import pandas as pd
+import logging
+
+
+# ------------------ Config ------------------ #
+logging.basicConfig(level=logging.DEBUG)
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
@@ -23,6 +28,7 @@ if deviceNum == 'kasa':
     filePrefix = 'kasa_'
 else:
     filePrefix = 'sensor' + str(deviceNum) + '_'
+logging.debug(f'file prefix: {filePrefix}')
 
 HTML = """
 <!DOCTYPE html>
@@ -57,6 +63,9 @@ HTML = """
 </body>
 </html>
 """
+
+if deviceNum == 'kasa':
+    HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
 
 @app.route("/")
 def index():

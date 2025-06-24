@@ -96,7 +96,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_logger.py
-    cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.service /etc/systemd/system/kasa_logger.service
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_logger.service /etc/systemd/system/kasa_logger.service
 
     systemctl daemon-reexec
     systemctl daemon-reload
@@ -110,7 +110,7 @@ chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.py
 
 cp /home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.service /etc/systemd/system/dashboard.service
 systemctl daemon-reexec
-sudo systemctl daemon-reload
+systemctl daemon-reload
 systemctl enable dashboard.service
 systemctl start dashboard.service
 echo "Dashboard service installed"
