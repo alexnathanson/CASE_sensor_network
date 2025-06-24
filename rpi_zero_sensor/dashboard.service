@@ -1,12 +1,12 @@
 [Unit]
-Description=Pi Sensor Dashboard
+Description=Pi Dashboard
 After=network.target
 Wants=network.target
 StartLimitIntervalSec=60
 StartLimitBurst=5
 
 [Service]
-ExecStart=/home/case/venv/bin/python /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py
+ExecStart=/home/case/venv/bin/python /home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.py
 WorkingDirectory=/home/case
 Restart=always
 RestartSec=5

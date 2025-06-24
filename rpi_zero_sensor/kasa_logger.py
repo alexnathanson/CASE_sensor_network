@@ -63,37 +63,37 @@ async def discoverAll():
 
     return data
 
-def archiveCSV(data):
-     # File path to save the CSV
-    directory = r"archive/kasa"
-    filename = 'kasa_' + str(datetime.date.today()) + '.csv'
-    logging.debug(directory)
-    logging.debug(filename)
+# def archiveCSV(data):
+#      # File path to save the CSV
+#     directory = r"archive/kasa"
+#     filename = 'kasa_' + str(datetime.date.today()) + '.csv'
+#     logging.debug(directory)
+#     logging.debug(filename)
 
-    if data.empty:
-        logging.warning("Received empty content. CSV file will not be saved.")
-        return
+#     if data.empty:
+#         logging.warning("Received empty content. CSV file will not be saved.")
+#         return
 
-    #check if directory exists
-    os.makedirs(directory, exist_ok=True)
+#     #check if directory exists
+#     os.makedirs(directory, exist_ok=True)
 
-    #make full file path
-    file_path = os.path.join(directory, filename)
-    logging.debug(file_path)
+#     #make full file path
+#     file_path = os.path.join(directory, filename)
+#     logging.debug(file_path)
 
-    try:
-        with open(file_path) as csvfile:
-            df = pd.read_csv(file_path)
-            df = pd.concat([df,data], ignore_index = True)
-            df.to_csv(file_path, sep=',',index=False)
-            print('Data written to existing CSV.')
-    except Exception as e:
-        logging.info('Failed to read CSV. Trying to write new CSV')
-        try:
-            data.to_csv(file_path, sep=',',index=False)
-            logging.info('New CSV created.')
-        except Exception as e:
-            logging.error(f'Failed to write new CSV. {e}')
+#     try:
+#         with open(file_path) as csvfile:
+#             df = pd.read_csv(file_path)
+#             df = pd.concat([df,data], ignore_index = True)
+#             df.to_csv(file_path, sep=',',index=False)
+#             print('Data written to existing CSV.')
+#     except Exception as e:
+#         logging.info('Failed to read CSV. Trying to write new CSV')
+#         try:
+#             data.to_csv(file_path, sep=',',index=False)
+#             logging.info('New CSV created.')
+#         except Exception as e:
+#             logging.error(f'Failed to write new CSV. {e}')
 
 async def main():
 

@@ -1,0 +1,15 @@
+[Unit]
+Description=Kasa smart plugs
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart=/home/case/venv/bin/python /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_logger.py
+WorkingDirectory=/home/case
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=case
+
+[Install]
+WantedBy=multi-user.target

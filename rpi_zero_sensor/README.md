@@ -36,12 +36,15 @@ See credentials doc for username, password, and network setting to use.
 Clone repository<br>
 `git clone https://github.com/alexnathanson/CASE_sensor_network.git`
 
+Create .env file
+* In rpi_zero_sensor directory: `sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/.env`
+* Add the Airtable API key and Kasa user credentials, with the variable names shown below. See credentials doc for info.
+	* `AIRTABLE=**************`
+	* `KASA_UN=**************`
+	* `KASA_PW=**************`
+
 Run automated installer script:<br>
 `sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/installer.sh`
-
-Create .env file
-* In rpi_zero_sensor directory: `sudo nano .env`
-* add this line  `AIRTABLE=API_KEY` replace API_KEY with actual key.
 
 ### Steps included in automated installation via utilities/installer.sh
 The following code does not need to be done manually, because it is included in script.

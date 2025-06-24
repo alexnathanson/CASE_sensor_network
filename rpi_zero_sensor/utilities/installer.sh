@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# run with sudo bash (not sudo sh)
+
 REPO_URL="https://github.com/alexnathanson/CASE_sensor_network.git"
 REPO_DST="/home/case"
 REPO_DIR="/home/case/CASE_sensor_network"
@@ -53,6 +55,7 @@ cd /home/case
 # Check if destination already exists
 if [ -d "/home/case/venv" ]; then
     echo "venv already exists. Skipping create venv."
+    sudo chown -R root:root /home/case/venv 
 else
 	python -m venv venv
 fi
@@ -61,7 +64,6 @@ source venv/bin/activate
 
 pip install -r /home/case/CASE_sensor_network/rpi_zero_sensor/requirements.txt
 
-# untested - added because creating the venv with sudo made it root
 sudo chown -R case:case /home/case/venv 
 
 echo "Python requirements installed"
@@ -80,15 +82,6 @@ then
     systemctl start sht31d_logger.service
     echo "Sensor logger service installed"
 
-    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py
-
-    cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service
-    systemctl daemon-reexec
-    sudo systemctl daemon-reload
-    systemctl enable sht31d_dashboard.service
-    systemctl start sht31d_dashboard.service
-    echo "Dashboard service installed"
-
 fi
 
 read -p "Are you running the Kasa script on this device? (y/n) " -n 1 -r
@@ -104,15 +97,17 @@ then
     systemctl start kasa_logger.service
     echo "Kasa logger service installed"
 
-    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_dashboard.py
-
-    cp /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_dashboard.service /etc/systemd/system/kasa_dashboard.service
-    systemctl daemon-reexec
-    sudo systemctl daemon-reload
-    systemctl enable kasa_dashboard.service
-    systemctl start kasa_dashboard.service
-    echo "Dashboard service installed"
 fi
+
+chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.py
+
+cp /home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.service /etc/systemd/system/dashboard.service
+systemctl daemon-reexec
+sudo systemctl daemon-reload
+systemctl enable dashboard.service
+systemctl start dashboard.service
+echo "Dashboard service installed"
+
 
 read -p "Are you running the Airtable script on this device? (y/n) " -n 1 -r
 echo    # (optional) move to a new line
