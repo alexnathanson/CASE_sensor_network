@@ -147,7 +147,6 @@ class Airtable():
                             "kasa2_W": str(data[n]["kasa2_W"]),
                             "kasa3_W": str(data[n]["kasa3_W"]),
                             "kasa4_W": str(data[n]["kasa4_W"])
-
                             }
                         })
                 elif 'sensor' in names[n]:
@@ -245,7 +244,7 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
                 logging.debug('FAILED!!!')
             else:
                 logging.debug('SLEEEEEEEEEEEEEEEEEPING')
-                asyncio.sleep(1)
+                await asyncio.sleep(1)
 
     return res
 
