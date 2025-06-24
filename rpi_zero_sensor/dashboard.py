@@ -163,7 +163,7 @@ def parse_timestamp(filename, startDate:str="2025-06-01", time_format:str="%Y-%m
     fileDate = filename.split("_")[-1].replace(".csv","")
     if fileDate and (fileDate != str(datetime.date.today())): #ignore today's file
         formattedFileDate = datetime.datetime.strptime(fileDate, time_format)
-        if formattedFileDate < datetime.datetime.strptime(startDate, time_format) #filter by start date
+        if formattedFileDate < datetime.datetime.strptime(startDate, time_format): #filter by start date
             return formattedFileDate
         return None
     return None
