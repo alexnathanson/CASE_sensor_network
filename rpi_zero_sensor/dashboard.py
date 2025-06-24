@@ -66,7 +66,7 @@ HTML = """
 """
 
 if deviceNum == 'kasa':
-    HTML = HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th><th></th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
+    HTML = HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
     HTML = HTML.replace("<td>{{ row[3] }}</td>","<td>{{ row[3] }}</td><td>{{ row[4] }}</td>")
 
 @app.route("/")

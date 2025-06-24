@@ -23,7 +23,7 @@ else
     fi
 fi
 
-read -p "Are you running temp/humidity sensor (y) or kasa (n)? " -n 1 -r
+read -p "Are you running temp/humidity sensor (y/n)? " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -32,7 +32,13 @@ then
     systemctl enable sht31d_logger.service
     systemctl start sht31d_logger.service
     echo "sensor logger restarted"
-else
+fi
+
+
+read -p "Are you running Kasa (y/n)? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
     systemctl daemon-reexec
     systemctl daemon-reload
     systemctl enable kasa_logger.service
