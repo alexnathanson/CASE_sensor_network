@@ -10,7 +10,7 @@ from typing import Any, Dict, Optional, List
 
 
 # ------------------ Config ------------------ #
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 #LOG_FILENAME = "kasa_log.log"
 
 load_dotenv()
@@ -143,7 +143,11 @@ class Airtable():
                         "fields": {
                             "name": str(f"{names[n]}"),
                             "datetime":str(data[n]['datetime']),
-                            "power": str(data[n][f"{names[n]}_W"])
+                            "kasa1_W": str(data[n]["kasa1_W"]),
+                            "kasa2_W": str(data[n]["kasa2_W"])
+                            "kasa3_W": str(data[n]["kasa3_W"])
+                            "kasa4_W": str(data[n]["kasa4_W"])
+
                             }
                         })
                 elif 'sensor' in names[n]:
