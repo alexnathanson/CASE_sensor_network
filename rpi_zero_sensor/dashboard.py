@@ -159,11 +159,13 @@ def run_command(cmd):
     except Exception as e:
         return f"Exception: {str(e)}"
 
-def parse_timestamp(filename, time_format="%Y-%m-%d"):
+def parse_timestamp(filename, startDate:str="2025-06-01", time_format:str="%Y-%m-%d",):
     fileDate = filename.split("_")[-1].replace(".csv","")
-    #print(fileDate)
-    if fileDate:
-        return datetime.datetime.strptime(fileDate, time_format)
+    if fileDate and (fileDate != str(datetime.date.today())): #ignore today's file
+        formattedFileDate = datetime.datetime.strptime(fileDate, time_format)
+        if formattedFileDate < datetime.datetime.strptime(startDate, time_format) #filter by start date
+            return formattedFileDate
+        return None
     return None
 
 def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict:
@@ -191,7 +193,7 @@ def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict
     lower_bound = avg * (1 - tolerance_ratio)
     upper_bound = avg * (1 + tolerance_ratio)
 
-    outliers = [(f, s) for f, _, s in file_data if s < lower or s > upper]
+    outliers = [(f, s) for f, _, s in file_data if s < lower_bound or s > upper_bound]
 
     # Find missing timestamps
     expected_ts = []
