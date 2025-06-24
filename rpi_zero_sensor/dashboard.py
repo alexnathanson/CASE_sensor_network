@@ -50,7 +50,7 @@ HTML = """
         View file list with /api/files
     </p>
     <table>
-        <tr><th>Timestamp</th><th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th></tr>
+        <tr><th>Timestamp</th><th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th><th></th></tr>
         {% for row in data %}
         <tr>
             <td>{{ row[0] }}</td>
@@ -66,7 +66,7 @@ HTML = """
 """
 
 if deviceNum == 'kasa':
-    HTML = HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
+    HTML = HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th><th></th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
 
 @app.route("/")
 def index():
