@@ -2,6 +2,7 @@ from flask import Flask, render_template_string, request, send_file, abort, json
 from flask_cors import CORS
 import csv
 import datetime
+from datetime import timedelta
 import os 
 import glob
 import json
@@ -9,6 +10,7 @@ import pandas as pd
 import logging
 import subprocess
 from typing import Any, Dict, List
+#import re
 
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.INFO)
@@ -157,30 +159,28 @@ def run_command(cmd):
     except Exception as e:
         return f"Exception: {str(e)}"
 
-def parse_timestamp(filename, pattern=r"log-(\d{8}-\d{4})", time_format="%Y%m%d-%H%M"):
-    match = re.search(pattern, filename)
-    if match:
-        return datetime.strptime(match.group(1), time_format)
+def parse_timestamp(filename, time_format="%Y%m%d"):
+    fileDate = filename.split("_")[-1]
+    if fileDate:
+        return datetime.strptime(fileDate, time_format)
     return None
 
 def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict:
     interval_minutes=60*60*24
     file_data=[]
 
-    # files = [
-    #     (f, os.path.getsize(os.path.join(folder_path, f)))
-    #     for f in os.listdir(folder_path)
-    #     if os.path.isfile(os.path.join(folder_path, f))
-    # ]
     for f in os.listdir(folder_path):
-        full_path = os.path.join(folder_path, f)
-        if os.path.isfile(full_path):
-            ts = parse_timestamp(f)
-            if ts:
-                size = os.path.getsize(full_path)
-                file_data.append((f, ts, size))
+        try:
+            full_path = os.path.join(folder_path, f)
+            if os.path.isfile(full_path):
+                ts = parse_timestamp(f)
+                if ts:
+                    size = os.path.getsize(full_path)
+                    file_data.append((f, ts, size))
+        except Exception as e:
+            logging.error(f'{e}')
 
-    if not files:
+    if not file_data:
         return "No timestamped files found in directory."
 
     # Sort by timestamp
