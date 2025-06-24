@@ -10,12 +10,13 @@ import logging
 
 
 # ------------------ Config ------------------ #
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
 
 deviceNum = config["sensor"]["number"]
+logging.debug(f'device number: {deviceNum}')
 
 app = Flask(__name__)
 
@@ -65,7 +66,7 @@ HTML = """
 """
 
 if deviceNum == 'kasa':
-    HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
+    HTML = HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
 
 @app.route("/")
 def index():

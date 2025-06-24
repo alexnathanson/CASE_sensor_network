@@ -6,7 +6,7 @@ import asyncio
 import logging
 import requests
 from typing import Any, Dict, Optional, List
-from kasa import Discover, Credentials
+#from kasa import Discover, Credentials
 
 
 # ------------------ Config ------------------ #
@@ -220,39 +220,39 @@ class Airtable():
 # --------------------------------------------------- #
 
 
-async def discoverAllKasa():
+# async def discoverAllKasa():
 
-    #discover all available devices
-    devices = await Discover.discover(
-        credentials=Credentials(un, pw),
-        discovery_timeout=10
-        )
+#     #discover all available devices
+#     devices = await Discover.discover(
+#         credentials=Credentials(un, pw),
+#         discovery_timeout=10
+#         )
 
-    data={
-        "datetime" : datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "kasa1_W": "",
-        "kasa2_W": "",
-        "kasa3_W": "",
-        "kasa4_W": ""}
+#     data={
+#         "datetime" : datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+#         "kasa1_W": "",
+#         "kasa2_W": "",
+#         "kasa3_W": "",
+#         "kasa4_W": ""}
 
-    logging.debug(len(devices))
+#     logging.debug(len(devices))
 
-    for ip, device in devices.items():
-        try:
-            await device.update()
+#     for ip, device in devices.items():
+#         try:
+#             await device.update()
 
-            # print(f'{device.alias} ({device.mac}) at {device.host}')
-            energy_module = device.modules.get("Energy")
-            # print(f'Power: {energy_module.current_consumption}W') #this library is really dumb - they use the word current to describe live power in Watts, NOT amperage
-            # print('')
+#             # print(f'{device.alias} ({device.mac}) at {device.host}')
+#             energy_module = device.modules.get("Energy")
+#             # print(f'Power: {energy_module.current_consumption}W') #this library is really dumb - they use the word current to describe live power in Watts, NOT amperage
+#             # print('')
 
-            data['kasa'+device.alias[4]+'_W']=energy_module.current_consumption
+#             data['kasa'+device.alias[4]+'_W']=energy_module.current_consumption
 
-            await device.disconnect()
-        except Exception as e:
-            logging.error(e)
+#             await device.disconnect()
+#         except Exception as e:
+#             logging.error(e)
 
-    return data
+#     return data
 
 
 async def send_get_request(url,type:str,timeout=1) -> Any:
@@ -322,10 +322,10 @@ async def main():
                 #now.append(await getSensorData(f'pi{n+1}.local'))
 
             if includeKasa:
-                nowKasa = await discoverAllKasa()
-                print(nowKasa)
-                now.append(nowKasa)
+                url = f"http://kasa.local:5000/api/data?date=now"
+                now.append(await send_get_request(url,'json'))
 
+            print(now)
             # try:
             #     await AT.updateBatch(AT.names,AT.IDs,now)
             # except Exception as e:
