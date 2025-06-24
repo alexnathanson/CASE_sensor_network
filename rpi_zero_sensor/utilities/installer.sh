@@ -66,35 +66,67 @@ sudo chown -R case:case /home/case/venv
 
 echo "Python requirements installed"
 
-chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py
 
-cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.service /etc/systemd/system/sht31d_logger.service
+read -p "Are you running the temperature/ humidity sensor on this device? (y/n) " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.service /etc/systemd/system/sht31d_logger.service
 
-systemctl daemon-reexec
-systemctl daemon-reload
-systemctl enable sht31d_logger.service
-systemctl start sht31d_logger.service
-echo "Sensor logger service installed"
+    systemctl daemon-reexec
+    systemctl daemon-reload
+    systemctl enable sht31d_logger.service
+    systemctl start sht31d_logger.service
+    echo "Sensor logger service installed"
 
+    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py
 
-chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service
+    systemctl daemon-reexec
+    sudo systemctl daemon-reload
+    systemctl enable sht31d_dashboard.service
+    systemctl start sht31d_dashboard.service
+    echo "Dashboard service installed"
 
-cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service
-systemctl daemon-reexec
-sudo systemctl daemon-reload
-systemctl enable sht31d_dashboard.service
-systemctl start sht31d_dashboard.service
-echo "Dashboard service installed"
+fi
 
-chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_airtable.py
+read -p "Are you running the Kasa script on this device? (y/n) " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_logger.py
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.service /etc/systemd/system/kasa_logger.service
 
-cp /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_airtable.service /etc/systemd/system/sht31d_airtable.service
-systemctl daemon-reexec
-sudo systemctl daemon-reload
-systemctl enable sht31d_airtable.service
-systemctl start sht31d_airtable.service
-echo "Airtable service installed"
+    systemctl daemon-reexec
+    systemctl daemon-reload
+    systemctl enable kasa_logger.service
+    systemctl start kasa_logger.service
+    echo "Kasa logger service installed"
 
+    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_dashboard.py
+
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/kasa_dashboard.service /etc/systemd/system/kasa_dashboard.service
+    systemctl daemon-reexec
+    sudo systemctl daemon-reload
+    systemctl enable kasa_dashboard.service
+    systemctl start kasa_dashboard.service
+    echo "Dashboard service installed"
+fi
+
+read -p "Are you running the Airtable script on this device? (y/n) " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/airtable.py
+
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/airtable.service /etc/systemd/system/airtable.service
+    systemctl daemon-reexec
+    sudo systemctl daemon-reload
+    systemctl enable airtable.service
+    systemctl start airtable.service
+    echo "Airtable service installed"
+fi
 
 # Line to add
 CRON_JOB="0 3 * * * /sbin/reboot"

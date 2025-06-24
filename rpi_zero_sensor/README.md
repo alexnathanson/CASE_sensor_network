@@ -15,6 +15,8 @@ Note that it is crucial that the host name of each Pi is unique and follows the 
 It is crucial that the host name of each Pi is unique and follows the naming convention, pi + integer. There are 8 sensors, so the range of numbers is 1-8.<br>
 hostname: pi[#1-8].local
 
+The hostname for the device collecting Kasa data is kasa.local
+
 See credentials doc for username, password, and network setting to use.
 
 ### Pi Setup

@@ -2,6 +2,6 @@
   "sensor": {
     "number": 0,
     "location":"",
-    "frequency":""
+    "frequency_seconds":300
   }
 }
