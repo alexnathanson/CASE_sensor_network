@@ -19,7 +19,10 @@ app = Flask(__name__)
 CORS(app)  
 
 filePath = '/home/case/data/'
-filePrefix = 'sensor' + str(deviceNum) + '_'
+if deviceNum == 'kasa':
+    filePrefix = 'kasa_'
+else:
+    filePrefix = 'sensor' + str(deviceNum) + '_'
 
 HTML = """
 <!DOCTYPE html>

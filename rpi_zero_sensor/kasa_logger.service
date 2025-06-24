@@ -1,5 +1,5 @@
 [Unit]
-Description=Kasa smart plugs
+Description=Kasa smart plug data logger
 After=network.target
 Wants=network.target
 

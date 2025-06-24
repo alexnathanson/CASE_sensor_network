@@ -23,23 +23,34 @@ else
     fi
 fi
 
-systemctl daemon-reexec
-systemctl daemon-reload
-systemctl enable sht31d_logger.service
-systemctl start sht31d_logger.service
-echo "logger restarted"
+read -p "Are you running temp/humidity sensor (y) or kasa (n)? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    systemctl daemon-reexec
+    systemctl daemon-reload
+    systemctl enable sht31d_logger.service
+    systemctl start sht31d_logger.service
+    echo "sensor logger restarted"
+else
+    systemctl daemon-reexec
+    systemctl daemon-reload
+    systemctl enable kasa_logger.service
+    systemctl start kasa_logger.service
+    echo "kasa logger restarted"
+fi
 
 systemctl daemon-reexec
 systemctl daemon-reload
-systemctl enable sht31d_dashboard.service
-systemctl start sht31d_dashboard.service
+systemctl enable dashboard.service
+systemctl start dashboard.service
 echo "dashboard restarted"
 
-systemctl daemon-reexec
-systemctl daemon-reload
-systemctl enable sht31d_airtable.service
-systemctl start sht31d_airtable.service
-echo "airtable restarted"
+# systemctl daemon-reexec
+# systemctl daemon-reload
+# systemctl enable airtable.service
+# systemctl start airtable.service
+# echo "airtable restarted"
 
 read -p "You may need to reboot for changes to take effect. Would you like to reboot? " -n 1 -r
 echo    # (optional) move to a new line

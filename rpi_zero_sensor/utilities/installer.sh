@@ -34,8 +34,15 @@ echo "Sensor #$SENSOR_NUM"
 # File to modify
 sudo cp "$CONFIG_TEMP" "$CONFIG"
 
+# this checks if its a number and puts quotes on it if not (untested)
+if [[ "$SENSOR_NUM" =~ ^[0-9]+$ ]]; then
+    formatted_SENSOR_NUM=$sensornum
+else
+    formatted_SENSOR_NUM="\"$SENSOR_NUM\""
+fi
+
 # Replace the line in the file
-sed -i "s/\"number\": *[0-9]\+,/\"number\": $SENSOR_NUM,/" "$CONFIG"
+sed -i "s/\"number\": *[0-9]\+,/\"number\": $formatted_SENSOR_NUM,/" "$CONFIG"
 
 echo "Updated 'sensor number' to $SENSOR_NUM in $CONFIG."
 
@@ -55,7 +62,7 @@ cd /home/case
 # Check if destination already exists
 if [ -d "/home/case/venv" ]; then
     echo "venv already exists. Skipping create venv."
-    #sudo chown -R root:root /home/case/venv 
+    sudo chown -R root:root /home/case/venv 
 else
 	python -m venv venv
 fi
