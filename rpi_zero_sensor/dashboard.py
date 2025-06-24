@@ -133,8 +133,7 @@ def list_csv_files():
 
     return jsonify(filenames)
 
-@app.route("/api/disk")
-def get_disk_usage():
+def parse_disk_usage():
     stat = os.statvfs("/")
 
     total = stat.f_frsize * stat.f_blocks      # Total space
@@ -146,12 +145,17 @@ def get_disk_usage():
     free_mb = free // (1024 * 1024)
     percent_used = round((used / total) * 100, 1)
 
-    return jsonify({
+    return {
         "total_mb": total_mb,
         "used_mb": used_mb,
         "free_mb": free_mb,
         "percent_used": percent_used
-    })
+    }
+
+@app.route("/api/disk")
+def get_disk_usage():
+
+    return jsonify(parse_disk_usage)
 
 def run_command(cmd):
     try:
