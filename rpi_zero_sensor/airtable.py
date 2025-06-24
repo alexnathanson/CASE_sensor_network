@@ -144,8 +144,8 @@ class Airtable():
                             "name": str(f"{names[n]}"),
                             "datetime":str(data[n]['datetime']),
                             "kasa1_W": str(data[n]["kasa1_W"]),
-                            "kasa2_W": str(data[n]["kasa2_W"])
-                            "kasa3_W": str(data[n]["kasa3_W"])
+                            "kasa2_W": str(data[n]["kasa2_W"]),
+                            "kasa3_W": str(data[n]["kasa3_W"]),
                             "kasa4_W": str(data[n]["kasa4_W"])
 
                             }
