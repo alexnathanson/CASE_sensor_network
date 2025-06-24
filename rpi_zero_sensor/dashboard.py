@@ -179,8 +179,8 @@ def health_check():
     sdCardErrors = run_command("dmesg | grep mmc")
     sdCardErrors = sdCardErrors if sdCardErrors else "No mmc errors detected."
 
-    return jsonifyReport({
-        "datetime": dt,
+    return jsonify({
+        "datetime": dt.strftime("%Y-%m-%d %H:%M:%S"),
         "cpu_temp": cpu_temp,
         "uptime": uptime,
         "memoryUsage": memoryUsage,
@@ -188,7 +188,6 @@ def health_check():
         "powerIssues" : powerIssues,
         "sdCardErrors" : sdCardErrors
     })
-    return jsonifyReport
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
