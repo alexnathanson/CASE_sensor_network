@@ -217,44 +217,6 @@ class Airtable():
             logging.warning(f'{response.status_code}: {response.text}')
             return False
 
-# --------------------------------------------------- #
-
-
-# async def discoverAllKasa():
-
-#     #discover all available devices
-#     devices = await Discover.discover(
-#         credentials=Credentials(un, pw),
-#         discovery_timeout=10
-#         )
-
-#     data={
-#         "datetime" : datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-#         "kasa1_W": "",
-#         "kasa2_W": "",
-#         "kasa3_W": "",
-#         "kasa4_W": ""}
-
-#     logging.debug(len(devices))
-
-#     for ip, device in devices.items():
-#         try:
-#             await device.update()
-
-#             # print(f'{device.alias} ({device.mac}) at {device.host}')
-#             energy_module = device.modules.get("Energy")
-#             # print(f'Power: {energy_module.current_consumption}W') #this library is really dumb - they use the word current to describe live power in Watts, NOT amperage
-#             # print('')
-
-#             data['kasa'+device.alias[4]+'_W']=energy_module.current_consumption
-
-#             await device.disconnect()
-#         except Exception as e:
-#             logging.error(e)
-
-#     return data
-
-
 async def send_get_request(url,type:str,timeout=1) -> Any:
     """Send GET request to the IP."""
 
