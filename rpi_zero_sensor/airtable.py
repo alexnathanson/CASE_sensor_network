@@ -134,6 +134,8 @@ class Airtable():
 
         records = []
         for n in range(len(names)):
+            if data[n]=={}:
+                continue
             try:
                 if 'kasa' in names[n]:
                     logging.debug(f'{names[n]}!')
@@ -263,7 +265,7 @@ async def main():
 
         logging.debug(AT.names)
     AT.IDs = await AT.getRecordID(AT.names)
-    logging.info(AT.IDs)
+    logging.debug(AT.IDs)
 
     while True:
         now = []
