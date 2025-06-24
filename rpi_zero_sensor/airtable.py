@@ -288,10 +288,10 @@ async def main():
                 now.append(await send_get_request(url,'json'))
 
             print(now)
-            # try:
-            #     await AT.updateBatch(AT.names,AT.IDs,now)
-            # except Exception as e:
-            #     logging.error(e)
+            try:
+                await AT.updateBatch(AT.names,AT.IDs,now)
+            except Exception as e:
+                logging.error(e)
 
         logging.debug(f'No exceptions, sleeping for {FREQ_SECONDS/60} minutes.')
         await asyncio.sleep(FREQ_SECONDS)
