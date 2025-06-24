@@ -225,7 +225,7 @@ def health_check():
 
     uptime = run_command("uptime").split(',')[0]
 
-    availMem = run_command("free -h").split('\n')[1].split()[-1]
+    availMem = int(run_command("free -h").split('\n')[1].split()[-1].replace('Mi',''))
     memStatus = 'OK'
     if availMem < 50:
         memStatus = 'VERY LOW'
