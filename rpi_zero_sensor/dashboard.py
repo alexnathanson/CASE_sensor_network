@@ -145,17 +145,18 @@ def parse_disk_usage():
     free_mb = free // (1024 * 1024)
     percent_used = round((used / total) * 100, 1)
 
-    return {
+    diskDict =  {
         "total_mb": total_mb,
         "used_mb": used_mb,
         "free_mb": free_mb,
         "percent_used": percent_used
     }
 
+    return diskDict
+
 @app.route("/api/disk")
 def get_disk_usage():
-
-    return jsonify(parse_disk_usage)
+    return jsonify(parse_disk_usage())
 
 def run_command(cmd):
     try:
@@ -220,36 +221,68 @@ def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict
         "status": "OK" if not outliers and not missing_ts else "WARNING: Issues found"
     }
 
+
+def check_mmc_errors():
+    dmesg_output = run_command("dmesg | grep mmc")
+
+    error_keywords = ["error", "fail", "timeout", "crc", "interrupt", "reset", "re-init"]
+    warnings = [
+        line for line in dmesg_output.splitlines()
+        if any(kw.lower() in line.lower() for kw in error_keywords)
+    ]
+
+    return warnings
+
 @app.route("/api/health")
 def health_check():
     # any run_command can also be entered manually in terminal
     dt = datetime.datetime.now()
 
-    cpu_tempC = run_command("vcgencmd measure_temp").replace('temp=','').replace("\'C","")
+    try:
+        cpu_tempC = run_command("vcgencmd measure_temp").replace('temp=','').replace("\'C","")
+    except Exception as e:
+        cpu_tempC = f"error: {str(e)}"
 
-    uptime = run_command("uptime").split(',')[0]
+    try:
+        uptime = run_command("uptime").split(',')[0]
+    except Exception as e:
+        uptime = f"error: {str(e)}"
 
-    availMem = int(run_command("free -h").split('\n')[1].split()[-1].replace('Mi',''))
-    memStatus = 'OK'
-    if availMem < 50:
-        memStatus = 'VERY LOW'
-    elif availMem < 100:
-        memStatus = 'LOW'
-    memoryUsage = {'available memory':f'{availMem}Mi','status':memStatus}
+    try:
+        availMem = int(run_command("free -h").split('\n')[1].split()[-1].replace('Mi',''))
+        memStatus = 'OK'
+        if availMem < 50:
+            memStatus = 'VERY LOW'
+        elif availMem < 100:
+            memStatus = 'LOW'
+        memoryUsage = {'available memory':f'{availMem}Mi','status':memStatus}
+    except Exception as e:
+        memoryUsage = f"error: {str(e)}"
 
-    diskUsage = get_disk_usage()#run_command("df -h")
+    try:
+        diskUsage = parse_disk_usage()#run_command("df -h")
+    except Exception as e:
+        diskUsage = f"error: {str(e)}"
 
-    throttled = run_command("vcgencmd get_throttled")
-    if "0x0" in throttled:
-        throttled = "OK"
-    else:
-        throttled = "Power supply issue or undervoltage!"
-    powerIssues = throttled
+    try:
+        throttled = run_command("vcgencmd get_throttled")
+        if "0x0" in throttled:
+            throttled = "OK"
+        else:
+            throttled = "Power supply issue or undervoltage!"
+        powerIssues = throttled
+    except Exception as e:
+        powerIssues = f"error: {str(e)}"
 
-    sdCardErrors = run_command("dmesg | grep mmc")
-    sdCardErrors = sdCardErrors if sdCardErrors else "No mmc errors detected."
+    try:
+        sdCardErrors = check_mmc_errors()# run_command("dmesg | grep mmc")
+    except Exception as e:
+        sdCardErrors = f"error: {str(e)}"
 
-    fileStatus = check_file_size_uniformity("/home/case/data")
+    try:
+        fileStatus = check_file_size_uniformity("/home/case/data")
+    except Exception as e:
+        fileStatus = f"error: {str(e)}"
 
     return jsonify({
         "datetime": dt.strftime("%Y-%m-%d %H:%M:%S"),
