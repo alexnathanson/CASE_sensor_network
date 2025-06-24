@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import asyncio
 from kasa import Discover, Credentials
 import logging
-import csv
+#import pandas as pd
 
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.INFO)
@@ -119,13 +119,21 @@ async def main():
         # except Exception as e:
         #     print(e)
         #     newDF.to_csv(fileName, sep=',',index=False)
-        with open(fileName, mode="a", newline="") as file:
-            writer = csv.DictWriter(file, fieldnames=power_data.keys())
-            file.seek(0, 2)  # move to end of file
-            if file.tell() == 0: # check if file is new before writing headers
-                    writer.writeheader()
+        try:
+            with open(fileName, mode="a", newline="") as file:
+                writer = csv.DictWriter(file, fieldnames=power_data.keys())
+                file.seek(0, 2)  # move to end of file
+                if file.tell() == 0: # check if file is new before writing headers
+                        writer.writeheader()
 
-            writer.writerow(data)
+        except Exception as e:
+            logging.info(f'{e}')
+            with open(fileName, mode="w", newline="") as file:
+                writer = csv.DictWriter(file, fieldnames=power_data.keys())
+                # file.seek(0, 2)  # move to end of file
+                # if file.tell() == 0: # check if file is new before writing headers
+                writer.writeheader()
+                writer.writerow(data)
 
         #collect data every 5 minutes
         await asyncio.sleep(60 * 5)
@@ -134,4 +142,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except Exception as e:
-        logger.critical(f"Main loop crashed: {e}")
+        logging.critical(f"Main loop crashed: {e}")
