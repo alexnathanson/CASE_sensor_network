@@ -55,12 +55,12 @@ cd /home/case
 # Check if destination already exists
 if [ -d "/home/case/venv" ]; then
     echo "venv already exists. Skipping create venv."
-    sudo chown -R root:root /home/case/venv 
+    #sudo chown -R root:root /home/case/venv 
 else
 	python -m venv venv
 fi
 
-source venv/bin/activate
+source /home/case/venv/bin/activate
 
 pip install -r /home/case/CASE_sensor_network/rpi_zero_sensor/requirements.txt
 
