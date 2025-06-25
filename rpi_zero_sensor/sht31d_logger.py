@@ -12,6 +12,7 @@ with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
 
 deviceNum = config["sensor"]["number"]
+freq = int(config["sensor"]["frequency_seconds"])
 
 i2c = board.I2C() # this also works
 sensor = adafruit_sht31d.SHT31D(i2c)
@@ -56,7 +57,7 @@ def main():
 			newDF.to_csv(fileName, sep=',',index=False)
 
 		#collect data every 5 minutes
-		time.sleep(60*5)
+		time.sleep(freq)
 
 if __name__ == "__main__":
 	main()

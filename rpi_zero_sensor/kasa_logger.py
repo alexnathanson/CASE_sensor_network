@@ -12,8 +12,9 @@ import pandas as pd
 # ------------------ Config ------------------ #
 logging.basicConfig(level=logging.INFO)
 
-# with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
-#     config = json.load(f)
+with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
+    config = json.load(f)
+freq = int(config["sensor"]["frequency_seconds"])
 
 # deviceNum = config["sensor"]["number"]
 
@@ -84,8 +85,7 @@ async def main():
             except Exception as e:
                 logging.error(f'Failed to write new CSV. {e}')
 
-        #collect data every 5 minutes
-        await asyncio.sleep(60 * 5)
+        await asyncio.sleep(freq)
 
 if __name__ == "__main__":
     try:
