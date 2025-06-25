@@ -1,49 +1,20 @@
-import os
 import datetime
 import json
-from dotenv import load_dotenv
 import asyncio
 import logging
 import requests
 from typing import Any, Dict, Optional, List
 
-
-# ------------------ Config ------------------ #
-logging.basicConfig(level=logging.INFO)
-#LOG_FILENAME = "kasa_log.log"
-
-load_dotenv()
-key = os.getenv('AIRTABLE')
-if not key:
-    logger.error("Missing AIRTABLE in environment.")
-    raise EnvironmentError("Missing Kasa credentials")
-
-# if true collect Kasa data
-includeKasa = True
-
-try:
-    with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
-        config = json.load(f)
-
-    deviceNum = config["sensor"]["number"]
-except Exception as e:
-    logging.error(e)
-
-# mode: 1 = only individual data; 8 = all data
-MODE = 8
-
-FREQ_SECONDS = 60 * 60
-
 # ------------------ Airtable Class ------------------ #
 class Airtable():
-    def __init__(self, key:str, name:str=''):
+    def __init__(self, key:str, table:str, name:str=''):
         self.key = key
         self.url = 'https://api.airtable.com/v0/appWyfKF1xclZ6OtH/'
-        self.table = 'live'
+        self.table = table
         self.IDs = []
         self.names=[]
 
-
+    # retrieves record IDs by name
     async def getRecordID(self,name:List)-> List:
         IDlist = []
         for n in name:
@@ -66,7 +37,7 @@ class Airtable():
 
     # updates up to 10 records at once
     # https://airtable.com/developers/web/api/update-multiple-records
-    async def updateBatch(self, names:List, recordIDs:List,data:List):
+    async def updateBatchLive(self, names:List, recordIDs:List,data:List):
         logging.debug(names)
 
         records = []
@@ -158,88 +129,3 @@ class Airtable():
         else:
             logging.warning(f'{response.status_code}: {response.text}')
             return False
-
-async def send_get_request(url,type:str,timeout=1) -> Any:
-    """Send GET request to the IP."""
-
-    # get own data
-    max_tries = 3
-    for attempt in range(max_tries):
-        logging.debug(f'Attempt #{attempt+1}')
-        try:
-            response = requests.get(f"{url}", timeout=timeout)
-            response.raise_for_status()
-            if type == 'json':
-                res = response.json()
-            elif type == 'text':
-                res = response.text
-            else:
-                res = response.status_code
-            break
-        except Exception as e:
-            logging.error(f'{e}')
-            if attempt == max_tries-1: # try up to 3 times
-                res = {}
-                logging.debug('FAILED!!!')
-            else:
-                logging.debug('SLEEEEEEEEEEEEEEEEEPING')
-                await asyncio.sleep(1)
-
-    return res
-
-async def main():
-    AT = Airtable(key)
-
-    # get record IDs once at start to minimize API calls
-    if MODE == 1:
-        AT.names = [f'sensor{deviceNum}']
-    else:
-        for n in range(8):
-            AT.names.append(f'sensor{n+1}')
-
-        if includeKasa:
-            AT.names.append('kasa')
-
-        logging.debug(AT.names)
-    AT.IDs = await AT.getRecordID(AT.names)
-    logging.debug(AT.IDs)
-
-    while True:
-        now = []
-        # get own data - Mode1 not tested
-        if MODE == 1:
-
-            url = f"http://{localhost}:5000/api/data?date=now"
-            now.append(await send_get_request(url,'json'))
-
-            try:
-                await AT.updateBatch(AT.names,AT.IDs,now)
-            except Exception as e:
-                logging.error(e)
-
-        # get everyone elses data
-        else:
-            for n in range(8):
-                url = f"http://pi{n+1}.local:5000/api/data?date=now"
-                now.append(await send_get_request(url,'json'))
-
-                #now.append(await getSensorData(f'pi{n+1}.local'))
-
-            if includeKasa:
-                url = f"http://kasa.local:5000/api/data?date=now"
-                now.append(await send_get_request(url,'json'))
-
-            print(now)
-            try:
-                await AT.updateBatch(AT.names,AT.IDs,now)
-            except Exception as e:
-                logging.error(e)
-
-        logging.debug(f'No exceptions, sleeping for {FREQ_SECONDS/60} minutes.')
-        await asyncio.sleep(FREQ_SECONDS)
-
-if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except Exception as e:
-        logging.critical(f"Main loop crashed: {e}")
