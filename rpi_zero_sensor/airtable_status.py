@@ -100,7 +100,7 @@ async def main():
             # if no results, wait 5 seconds and try again in a few minutes
             if health == {}:
                 await asyncio.sleep(5)
-                health = await send_get_request(url,3,'json')
+                health = await send_get_request(url,'json',3)
 
             now.append(health)
 
@@ -110,7 +110,7 @@ async def main():
             # if no results, wait 5 seconds and try again in a few minutes
             if health == {}:
                 await asyncio.sleep(5)
-                health = await send_get_request(url,3,'json')
+                health = await send_get_request(url,'json',3)
 
             now.append(health)
 
