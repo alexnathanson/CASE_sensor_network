@@ -1,120 +1,48 @@
-# RPi Zero W2 Installation
+# Sensor Network
 
-There are 2 Python scripts that need to be installed as services to run automatically on the RPi Zero sensors:
-* logger
-* dashboard
+All RPis should be running:
+* dashboard.service
+The devices running temperature/ humidity sensors should be running:
+* sht31d_logger.service
+The device running Kasa should runu:
+* kasa_logger.service
+The device running Airtable (the Kasa rpi in most cases):
+* airtable_live.service
+* airtable_status.service
 
-Logger collects the data and stores it as a CSV. Dashboard makes the data available via an API.
+Logger collects the data and stores it as a CSV. Dashboard makes the data available via an API. Airtable updates the cloud database.
 
-Note that it is crucial that the host name of each Pi is unique and follows the naming convention. Also, the config file should be updated with the correct number.
+Note that it is crucial that the host name of each Pi is unique and follows the naming convention. Also, the config file should be updated with the correct number. The kasa device is named kasa and the value entered into the config file should be 'kasa'.
 
-Healthcheck, Airtable, and Kasa scripts are not run on devices with SHT31-D sensors. These are run on another device, named Kasa.
+## Installation
 
-## OS and Software Installation
+See installation doc.
 
-### Pi Imager Settings
+## Dashboards and APIs
 
-It is crucial that the host name of each Pi is unique and follows the naming convention, pi + integer. There are 8 sensors, so the range of numbers is 1-8.<br>
-hostname: pi[#1-8].local
+### Local Dashboard and APIs
 
-The hostname for the device collecting Kasa data is kasa.local
+Within the local network (CASE_sensor_network) data from each device can be accessed via their dashboard and APIs. 
+All RPi sensors use the same naming convention: pi + #1-8 + .local i.e. pi1.local
 
-See credentials doc for username, password, and network setting to use.
+All APIs and dashboards are available on port 5000
 
-### Pi Setup
-`sudo apt-get update`
+* A dataviz of today's data is available at root: http://pi1.local:5000
+* A list of files stored on the device (in json) is available at `api/files`: http://pi1.local:5000/api/files
+* To download a specific csv file, use the `api/data` endpoint with the date argument `?date=YYYY-MM-DD`: http://pi1.local:5000/api/data?date=2025-04-6
+* To get most recent data (json), use the `api/data` endpoint with the date argument set to now `?date=now`: http://pi1.local:5000/api/data?date=now
+* To check disk usage (json), use the `/api/disk` endpoint: http://pi1.local:5000/api/disk
 
-`sudo apt-get upgrade`
+### Local Network Dashboard
 
-`sudo raspi-config`
-* Enable I2C
-* Don't overlay file system
-* Localization
-	* enable US.UTF-8 (optionally, removing GB will free up a little space)
-	* set timezone to NY
-	* set WLAN to US
-* Expand filesystem
+* navigate to the directory and type in terminal `python -m http.server 8000`
+* in a browser, go to http://localhost:8000/
 
-Clone repository<br>
-`git clone https://github.com/alexnathanson/CASE_sensor_network.git`
+### External Dashboard
 
-Create .env file
-* In rpi_zero_sensor directory: `sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/.env`
-* Add the Airtable API key and Kasa user credentials, with the variable names shown below. See credentials doc for info.
-	* `AIRTABLE=**************`
-	* `KASA_UN=**************`
-	* `KASA_PW=**************`
+Outside of the local network, data can be check via the Airtable API.
 
-Run automated installer script:<br>
-`sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/installer.sh`
-
-### Steps included in automated installation via utilities/installer.sh
-The following code does not need to be done manually, because it is included in script.
-
-#### Setup Directories
-
-Create data directory and assign ownership<br>
-`mkdir /home/case/data`<br>
-`sudo chown case:case /home/case/data`
-
-
-Copy config and set sensor number<br>
-`sudo cp /home/case/CASE_sensor_network/rpi_zero_sensor/config_template.json /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`<br>
-`sudo nano /home/case/CASE_sensor_network/rpi_zero_sensor/config.json`
-
-Create venv in user directory<br>
-`cd /home/case<br>`<br>
-`python -m venv venv`
-
-Activate venv<br>
-`source venv/bin/activate`
-
-#### Install libraries
-
-Install from requirements.txt<br>
-`pip install -r requirements.txt`
-
-If that fails, install manually via pip:
-
-* SHT31-D sensor library https://github.com/adafruit/Adafruit_CircuitPython_SHT31D
-	* `pip install adafruit-circuitpython-sht31d`
-* `pip install pandas`
-
-
-#### Automate
-
-Make script executable<br>
-`chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_logger.py`
-
-Copy service file<br>
-`sudo cp sh31d_logger.service /etc/systemd/system/sht31d_logger.service`
-
-Reload and enable<br>
-`sudo systemctl daemon-reexec`<br>
-`sudo systemctl daemon-reload`<br>
-`sudo systemctl enable sht31d_logger.service`<br>
-`sudo systemctl start sht31d_logger.service`
-
-Dashboard Automation:<br>
-`chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/sht31d_dashboard.py`<br>
-`sudo cp sh31d_dashboard.service /etc/systemd/system/sht31d_dashboard.service`<br>
-`sudo systemctl daemon-reexec`<br>
-`sudo systemctl daemon-reload`<br>
-`sudo systemctl enable sht31d_dashboard.service`<br>
-`sudo systemctl start sht31d_dashboard.service`
-
-Set daily reboot at 3am (run manually - not installed automatically)<br>
-`sudo crontab -e`<br>
-Add this line at the bottom of the file `0 3 * * * /sbin/reboot`
-
-#### To confirm successful installation
-
-After running automation installer, check if they are running<br>
-`sudo systemctl status sht31d_logger.service`<br>
-`sudo systemctl status sht31d_dashboard.service`
-
-## SHT31-D Sensor Wiring
-![image](https://cdn-learn.adafruit.com/assets/assets/000/101/432/medium640/adafruit_products_SHT31_RasPi_breadboard_bb.jpg?1618427246)
+## Airtable
 
 ## Troubleshooting
 

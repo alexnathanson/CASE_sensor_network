@@ -17,6 +17,18 @@ A Windows laptop
 * collects sensors data from AC
 * post aggregated data to cloud database
 
+<p>
+The specific services each RPi runs depends on its role. All RPis should be running:
+* dashboard.service
+The devices running temperature/ humidity sensors should be running:
+* sht31d_logger.service
+The device running Kasa should runu:
+* kasa_logger.service
+The device running Airtable (the Kasa rpi in most cases):
+* airtable_live.service
+* airtable_status.service
+</p>
+
 ## Network
 
 When on network, log in to router via a browser with http://tplinkeap.net/ <Br>
@@ -27,14 +39,3 @@ See Google Doc for log info.
 To find RPi IPs, log in to WAP via browser
 
 ## To do
-
-automate and make resilient
-remote access or posting... git?
-look into Bonjour on windows to deal with host names?
-pscp files to... somewhere?
-
-quality/ health check
-* check free disk space
-* check files exist
-* check file sizes
-* spot check amount of rows and data validation
