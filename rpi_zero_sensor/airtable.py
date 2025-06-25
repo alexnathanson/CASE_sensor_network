@@ -109,7 +109,10 @@ class Airtable():
                 # patch record - columns not included are not changed
                 records.append({
                     "id": str(recordIDs[n]),
-                    **{key: str(value) for key, value in data[n].items()}
+                    "fields": {
+                        "name": str(names[n]),
+                        **{key: str(value) for key, value in data[n].items()}
+                        }
                     })
             except Exception as e:
                 logging.error(f'Exception while formatting sensor data: {e}')
