@@ -94,6 +94,44 @@ class Airtable():
             except Exception as e:
                 logging.error(f'Exception while patching Airtable: {e}')
 
+    # updates up to 10 records at once
+    # https://airtable.com/developers/web/api/update-multiple-records
+    async def updateBatch(self, names:List, recordIDs:List,data:List):
+        logging.debug(names)
+
+        records = []
+        for n in range(len(names)):
+            if data[n]=={}:
+                continue
+            try:
+                logging.debug(f'{names[n]}!')
+
+                # patch record - columns not included are not changed
+                records.append({
+                    "id": str(recordIDs[n]),
+                    **{key: str(value) for key, value in data[n].items()}
+                    })
+            except Exception as e:
+                logging.error(f'Exception while formatting sensor data: {e}')
+
+            pData={"records": records}
+
+            logging.debug(pData)
+
+            try:
+
+                patch_status = 0
+                while patch_status < 3:
+                    # note that patch leaves unchanged data in place, while a post would delete old data in the record even if not being updated
+                    r = await self.send_patch_request(f'{self.url}{self.table}',pData)
+                    if r != False:
+                        break
+                    await asyncio.sleep(1+patch_status)
+                    patch_status += 1
+                logging.debug(r)
+            except Exception as e:
+                logging.error(f'Exception while patching Airtable: {e}')
+
     async def send_secure_get_request(self, url:str,type:str='json',timeout=2) -> Any:
         """Send GET request to the IP."""
         try:

@@ -63,7 +63,7 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
     return res
 
 async def main():
-    AT = Airtable(key,'live')
+    AT = Airtable(key,'status')
 
     # get record IDs once at start to minimize API calls
     if MODE == 1:
@@ -84,7 +84,7 @@ async def main():
         # get own data - Mode1 not tested
         if MODE == 1:
 
-            url = f"http://{localhost}:5000/api/data?date=now"
+            url = f"http://{localhost}:5000/api/health"
             now.append(await send_get_request(url,'json'))
 
             try:
@@ -95,13 +95,13 @@ async def main():
         # get everyone elses data
         else:
             for n in range(8):
-                url = f"http://pi{n+1}.local:5000/api/data?date=now"
+                url = f"http://pi{n+1}.local:5000/api/health"
                 now.append(await send_get_request(url,'json'))
 
                 #now.append(await getSensorData(f'pi{n+1}.local'))
 
             if includeKasa:
-                url = f"http://kasa.local:5000/api/data?date=now"
+                url = f"http://kasa.local:5000/api/health"
                 now.append(await send_get_request(url,'json'))
 
             print(now)

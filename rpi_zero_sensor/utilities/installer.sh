@@ -120,13 +120,13 @@ read -p "Are you running the Airtable script on this device? (y/n) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/airtable.py
+    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.py
 
-    cp /home/case/CASE_sensor_network/rpi_zero_sensor/airtable.service /etc/systemd/system/airtable.service
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.service /etc/systemd/system/airtable_live.service
     systemctl daemon-reexec
     sudo systemctl daemon-reload
-    systemctl enable airtable.service
-    systemctl start airtable.service
+    systemctl enable airtable_live.service
+    systemctl start airtable_live.service
     echo "Airtable service installed"
 fi
 
