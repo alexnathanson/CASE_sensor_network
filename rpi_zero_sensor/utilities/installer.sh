@@ -121,13 +121,20 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.py
-
     cp /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.service /etc/systemd/system/airtable_live.service
     systemctl daemon-reexec
-    sudo systemctl daemon-reload
+    systemctl daemon-reload
     systemctl enable airtable_live.service
     systemctl start airtable_live.service
-    echo "Airtable service installed"
+    echo "Airtable Live service installed"
+
+    chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.py
+    cp /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.service /etc/systemd/system/airtable_status.service
+    systemctl daemon-reexec
+    systemctl daemon-reload
+    systemctl enable airtable_status.service
+    systemctl start airtable_status.service
+    echo "Airtable Status service installed"
 fi
 
 # Line to add

@@ -58,7 +58,7 @@ async def send_get_request(url,type:str,backoff:int=1,timeout:int=1) -> Any:
                 logging.debug('FAILED!!!')
             else:
                 logging.debug('SLEEEEEEEEEEEEEEEEEPING')
-                await asyncio.sleep(1+(backoff* attempt))
+                await asyncio.sleep(1+(int(backoff)* int(attempt)))
 
     return res
 
@@ -99,7 +99,7 @@ async def main():
 
             # if no results, wait 5 seconds and try again in a few minutes
             if health == {}:
-                asyncio.sleep(5)
+                await asyncio.sleep(5)
                 health = await send_get_request(url,3,'json')
 
             now.append(health)
@@ -109,7 +109,7 @@ async def main():
             health =await send_get_request(url,'json')
             # if no results, wait 5 seconds and try again in a few minutes
             if health == {}:
-                asyncio.sleep(5)
+                await asyncio.sleep(5)
                 health = await send_get_request(url,3,'json')
 
             now.append(health)
