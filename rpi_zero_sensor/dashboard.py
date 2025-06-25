@@ -22,6 +22,9 @@ with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
 deviceNum = config["sensor"]["number"]
 logging.debug(f'device number: {deviceNum}')
 
+startDate = config["sensor"]["start_date"]
+logging.debug(f'start date: {startDate}')
+
 app = Flask(__name__)
 
 # CORS is enabled for all routes. This simplifies the frontend visualization,
@@ -177,7 +180,6 @@ def parse_timestamp(filename, startDate:str, time_format:str="%Y-%m-%d",):
 def check_file_size_uniformity(folder_path:str, tolerance_ratio:float=0.2)->Dict:
     interval_minutes=60*60*24
     file_data=[]
-    startDate="2025-06-01"
     for f in os.listdir(folder_path):
         try:
             full_path = os.path.join(folder_path, f)
