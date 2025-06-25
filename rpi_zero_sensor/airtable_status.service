@@ -1,0 +1,13 @@
+[Unit]
+Description=Sends status data to airtable once a day
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/case/venv/bin/python /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.py
+WorkingDirectory=/home/case
+User=case
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

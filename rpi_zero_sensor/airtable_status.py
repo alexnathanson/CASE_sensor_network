@@ -34,7 +34,7 @@ MODE = 8
 
 FREQ_SECONDS = 60 * 60
 
-async def send_get_request(url,type:str,timeout=1) -> Any:
+async def send_get_request(url,type:str,backoff:int=1,timeout:int=1) -> Any:
     """Send GET request to the IP."""
 
     # get own data
@@ -58,7 +58,7 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
                 logging.debug('FAILED!!!')
             else:
                 logging.debug('SLEEEEEEEEEEEEEEEEEPING')
-                await asyncio.sleep(1)
+                await asyncio.sleep(1+(backoff* attempt))
 
     return res
 
@@ -79,39 +79,46 @@ async def main():
     AT.IDs = await AT.getRecordID(AT.names)
     logging.debug(AT.IDs)
 
-    while True:
-        now = []
-        # get own data - Mode1 not tested
-        if MODE == 1:
+    now = []
+    # get own data - Mode1 not tested
+    if MODE == 1:
 
-            url = f"http://{localhost}:5000/api/health"
-            now.append(await send_get_request(url,'json'))
+        url = f"http://{localhost}:5000/api/health"
+        now.append(await send_get_request(url,'json'))
 
-            try:
-                await AT.updateBatch(AT.names,AT.IDs,now)
-            except Exception as e:
-                logging.error(e)
+        try:
+            await AT.updateBatch(AT.names,AT.IDs,now)
+        except Exception as e:
+            logging.error(e)
 
-        # get everyone elses data
-        else:
-            for n in range(8):
-                url = f"http://pi{n+1}.local:5000/api/health"
-                now.append(await send_get_request(url,'json'))
+    # get everyone elses data
+    else:
+        for n in range(8):
+            url = f"http://pi{n+1}.local:5000/api/health"
+            health = await send_get_request(url,'json')
 
-                #now.append(await getSensorData(f'pi{n+1}.local'))
+            # if no results, wait 5 seconds and try again in a few minutes
+            if health == {}:
+                asyncio.sleep(5)
+                health = await send_get_request(url,3,'json')
 
-            if includeKasa:
-                url = f"http://kasa.local:5000/api/health"
-                now.append(await send_get_request(url,'json'))
+            now.append(health)
 
-            print(now)
-            try:
-                await AT.updateBatch(AT.names,AT.IDs,now)
-            except Exception as e:
-                logging.error(e)
+        if includeKasa:
+            url = f"http://kasa.local:5000/api/health"
+            health =await send_get_request(url,'json')
+            # if no results, wait 5 seconds and try again in a few minutes
+            if health == {}:
+                asyncio.sleep(5)
+                health = await send_get_request(url,3,'json')
 
-        logging.debug(f'Sleeping for {FREQ_SECONDS/60} minutes.')
-        await asyncio.sleep(FREQ_SECONDS)
+            now.append(health)
+
+        print(now)
+        try:
+            await AT.updateBatch(AT.names,AT.IDs,now)
+        except Exception as e:
+            logging.error(e)
 
 if __name__ == "__main__":
     try:
