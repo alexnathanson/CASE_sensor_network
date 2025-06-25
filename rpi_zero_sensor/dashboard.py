@@ -239,7 +239,7 @@ def health_check():
     dt = datetime.datetime.now()
 
     try:
-        cpu_tempC = run_command("vcgencmd measure_temp").replace('temp=','').replace("\'C","")
+        cpu_tempC = float(run_command("vcgencmd measure_temp").replace('temp=','').replace("\'C",""))
     except Exception as e:
         cpu_tempC = f"error: {str(e)}"
 
