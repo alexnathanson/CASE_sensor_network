@@ -6,7 +6,6 @@ import asyncio
 import logging
 import requests
 from typing import Any, Dict, Optional, List
-#from kasa import Discover, Credentials
 
 
 # ------------------ Config ------------------ #
@@ -21,11 +20,6 @@ if not key:
 
 # if true collect Kasa data
 includeKasa = True
-un = os.getenv('KASA_UN')
-pw = os.getenv('KASA_PW')
-if not un or not pw:
-    logger.error("Missing KASA_UN or KASA_PW in environment.")
-    raise EnvironmentError("Missing Kasa credentials")
 
 try:
     with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
@@ -69,63 +63,6 @@ class Airtable():
                 logging.error(e)
 
         return IDlist
-
-    async def updateSingle(self, name:str, recordID:str,data):
-        logging.debug(name)
-        try:
-            # # get list of records filtered by name
-
-            # mURL = f'{self.url}{self.table}?maxRecords=3&view=Grid%20view&filterByFormula=name%3D%22{name}%22' #filter results by name column
-            # res = await self.send_secure_get_request(mURL)
-            # logging.debug(res)
-
-            # # pull the id for the first record
-            # recordID = res['records'][0]['id']
-            # logging.debug(recordID)
-
-            if 'kasa' in name:
-                logging.debug(f'{name}!')
-                # patch record - columns not included are not changed
-                pData={"records": [{
-                    "id": str(recordID),
-                    "fields": {
-                        "name": str(f"{name}"),
-                        "datetime":str(data['datetime']),
-                        "power": str(data[f"{name}_W"])
-                        }
-                    }]}
-            elif 'sensor' in name:
-                logging.debug(f'{name}!')
-
-                # patch record - columns not included are not changed
-                pData={"records": [{
-                    "id": str(recordID),
-                    "fields": {
-                        "name": str(name),
-                        "datetime":str(data['datetime']),
-                        "humidityP": str(data["humidityP"]),
-                        "tempC": str(data["tempC"]),
-                        "tempF": str(data["tempF"])
-                        }
-                    }]}
-
-            logging.debug(pData)
-
-            try:
-
-                patch_status = 0
-                while patch_status < 3:
-                    # note that patch leaves unchanged data in place, while a post would delete old data in the record even if not being updated
-                    r = await self.send_patch_request(f'{self.url}{self.table}',pData)
-                    if r != False:
-                        break
-                    await asyncio.sleep(1+patch_status)
-                    patch_status += 1
-                logging.debug(r)
-            except Exception as e:
-                logging.error(f'Exception with patching Airtable: {e}')
-        except Exception as e:
-            logging.error(f'Exception with getting Airtable records: {e}')
 
     # updates up to 10 records at once
     # https://airtable.com/developers/web/api/update-multiple-records
@@ -269,14 +206,14 @@ async def main():
 
     while True:
         now = []
-        # get own data
+        # get own data - Mode1 not tested
         if MODE == 1:
 
             url = f"http://{localhost}:5000/api/data?date=now"
             now.append(await send_get_request(url,'json'))
 
             try:
-                await AT.updateSingle(AT.names[0],AT.IDs[0],now[0])
+                await AT.updateBatch(AT.names,AT.IDs,now)
             except Exception as e:
                 logging.error(e)
 
