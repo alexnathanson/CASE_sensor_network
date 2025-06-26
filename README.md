@@ -3,9 +3,10 @@
 This system collects temperature, humidity, and power data.
 
 ## System Design
-
-<img src=/images/sensor-dataflows.jpg>
-Image: System data flows
+<p>
+	<img src=/images/sensor-dataflows.jpg>
+	Image: System data flows
+</p>
 
 SHT31-D Temperature and humidity sensors running on 8 identically configured Raspberry Pi Zero W2 devices. https://www.adafruit.com/product/2857
 
@@ -21,17 +22,15 @@ An addition RPi Zero W2 collects power data from Kasa smart plugs and posts aggr
 A Windows laptop
 * backs up data from each RPi
 
-<p>
 The specific services each RPi runs depends on its role. All RPis should be running:
 * dashboard.service
 The devices running temperature/ humidity sensors should be running:
 * sht31d_logger.service
-The device running Kasa should runu:
+The device running Kasa should run:
 * kasa_logger.service
-The device running Airtable (the Kasa rpi in most cases):
+The device running Airtable (the Kasa RPi in most cases):
 * airtable_live.service
 * airtable_status.service
-</p>
 
 ## Network
 
@@ -40,7 +39,9 @@ See Google Doc for log info.
 
 ## Troubleshooting
 
-To find RPi IPs, log in to WAP via browser
+All devices can be found via ssh or ping with their hostname i.e. pi1.local, or via a browser or curl with http://pi1.local:5000.
+
+If that doesn't work, log in to WAP via browser, http://tplinkeap.net/.
 
 ## To do
 
