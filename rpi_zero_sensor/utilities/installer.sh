@@ -107,7 +107,6 @@ then
 fi
 
 chmod +x /home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.py
-
 cp /home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.service /etc/systemd/system/dashboard.service
 systemctl daemon-reexec
 systemctl daemon-reload
