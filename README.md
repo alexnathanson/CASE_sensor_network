@@ -1,23 +1,25 @@
 # CASE_sensor_network
 
-https://www.adafruit.com/product/2857
-
-<img src=/images/sensor-dataflows.jpg>
+This system collects temperature, humidity, and power data.
 
 ## System Design
 
-Temperature and humidity sensors running on 8 identically configured Raspberry Pi Zero W 2 devices. Each device:
+<img src=/images/sensor-dataflows.jpg>
+Image: System data flows
+
+SHT31-D Temperature and humidity sensors running on 8 identically configured Raspberry Pi Zero W2 devices. https://www.adafruit.com/product/2857
+
+Each sensor device:
 * takes readings every 5 minutes
 * stores data locally
 * makes data available to other devices on the network through APIs
 	* host name is pi*.local where * is a number 1-8
 	* Port 5000
-	* API endpoints: /api/files, /api/disk, /api/data?date=YYYY-MM-DD
+	* API endpoints: /api/files, /api/disk, /api/health, /api/data?date=now, /api/data?date=YYYY-MM-DD
+An addition RPi Zero W2 collects power data from Kasa smart plugs and posts aggregated data to Airtable database.
 
 A Windows laptop
 * backs up data from each RPi
-* collects sensors data from AC
-* post aggregated data to cloud database
 
 <p>
 The specific services each RPi runs depends on its role. All RPis should be running:
