@@ -48,7 +48,6 @@ If that doesn't work, log in to WAP via browser, http://tplinkeap.net/.
 * plot timer series data on device dashboard
 * check that file status in health is accounting for everything missing, not just from start file
 * plot time series data for all devices on local network page
-* switch kasa to pi zero
 * test that windows device is archiving properly
 * print remaining cases (~4) and resolder sensors
-* finish documentationn
+* finish documentation

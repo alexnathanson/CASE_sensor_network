@@ -1,6 +1,8 @@
 *.sublime-project
 *.sublime-workspace
 
+config.json
+
 __pycache__/*
 
 *.crt

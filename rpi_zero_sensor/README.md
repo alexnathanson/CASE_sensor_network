@@ -2,10 +2,13 @@
 
 All RPis should be running:
 * dashboard.service
+
 The devices running temperature/ humidity sensors should be running:
 * sht31d_logger.service
-The device running Kasa should runu:
+
+The device running Kasa should run:
 * kasa_logger.service
+
 The device running Airtable (the Kasa rpi in most cases):
 * airtable_live.service
 * airtable_status.service
@@ -23,7 +26,7 @@ See installation doc.
 ### Local Dashboard and APIs
 
 Within the local network (CASE_sensor_network) data from each device can be accessed via their dashboard and APIs. 
-All RPi sensors use the same naming convention: pi + #1-8 + .local i.e. pi1.local
+All RPi sensors use the same naming convention: pi + #1-8 + .local i.e. pi1.local. The Kasa device can be found at kasa.local.
 
 All APIs and dashboards are available on port 5000
 
@@ -34,9 +37,8 @@ All APIs and dashboards are available on port 5000
 * To check disk usage (json), use the `/api/disk` endpoint: http://pi1.local:5000/api/disk
 
 ### Local Network Dashboard
-
-* navigate to the directory and type in terminal `python -m http.server 8000`
-* in a browser, go to http://localhost:8000/
+When on the local network, live data from all devices can be seen by running the website found in the 'local website' directory.
+* https://github.com/alexnathanson/CASE_sensor_network/blob/main/local%20website/README.md
 
 ### External Dashboard
 
@@ -45,6 +47,10 @@ Outside of the local network, data can be check via the Airtable API.
 ## Airtable
 
 ## Troubleshooting
+
+
+### Status
+`sudo systemctl status sht31d_logger.service`
 
 ### Logs
 `journalctl -u sht31d_logger.service -f`

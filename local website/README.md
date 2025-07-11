@@ -6,7 +6,7 @@ This is a front-end JS only site, the pulls data from the APIs running on the Ra
 
 To run:
 * Navigate to the "local website" directory and run `python -m http.server 8000`
-* In a browser, type `localhost:8000`
+* In a browser, go to http://localhost:8000/
 
 ## Plots
 

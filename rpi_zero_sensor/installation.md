@@ -129,6 +129,11 @@ After running automation installer, check if they are running<br>
 
 ## Troubleshooting
 
+If for some reason, the Kasa library wasn't working when install with pip, so it needed to be installed from git.<br>
+`git clone https://github.com/python-kasa/python-kasa.git`<br>
+`cd python-kasa/`<br>
+`pip install .`
+
 ### Logs
 `journalctl -u sht31d_logger.service -f`
 

@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional, List
 from airtable import Airtable
 
 # ------------------ Config ------------------ #
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 #LOG_FILENAME = "kasa_log.log"
 
 load_dotenv()
