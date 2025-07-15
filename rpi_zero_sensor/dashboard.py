@@ -25,6 +25,8 @@ logging.debug(f'device number: {deviceNum}')
 startDate = config["sensor"]["start_date"]
 logging.debug(f'start date: {startDate}')
 
+location = config["sensor"]["location"]
+
 app = Flask(__name__)
 
 # CORS is enabled for all routes. This simplifies the frontend visualization,
@@ -142,6 +144,10 @@ def list_csv_files():
     filenames = [os.path.basename(f) for f in files]
 
     return jsonify(filenames)
+
+@app.route("/api/location")
+def list_csv_files():
+    return location
 
 def parse_disk_usage():
     stat = os.statvfs("/")

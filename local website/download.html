@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live</title>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+  <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+</head>
+<body>
+  <p>
+    <a href="/index.html">Time-Series Sensor Data</a> | <a href="/live.html?data=sensor">Live Sensor Data</a> | <a href="/live.html?data=health">Health Check</a> | <a href="/download.html">Download Sensor Data</a>
+  </p>
+  <!-- <div id="results">Loading...</div> -->
+  <!-- <canvas id="timeseriesChart" width="800" height="400"></canvas> -->
+
+  <div>
+    <h2>Downloading Sensor Data</h2>
+    <p>
+      Sensor data can be retrieved in a number of ways. Each Raspberry Pi Zero device stores its own data on its SD card. The data is also copied to the Windows laptop.
+      <ul>
+        <li>The best way to retrieve data is via the API. This can be done programatically or via the sensor interfaces. Links to sensor interfaces are below.</li>
+        <li>You can also retrieve the files from the Windows laptop, assuming it is successfully archiving data.</li>
+        <li>You can SCP files from the devices directly. On all devices, the files are located in the /home/case/data directory.</li>
+        <li>You can manually copy CSV files directly from SD cards on device. This is less ideal, because it means that the sensor isn't collecting data while you are doing this.</li>
+      </ul>
+    </p>
+    <h3>Sensor Interfaces</h3>
+    <ul>
+      <li><a href='http://pi1.local:5000' target="_blank">Sensor 1</a></li>
+      <li><a href='http://pi2.local:5000' target="_blank">Sensor 2</a></li>
+      <li><a href='http://pi3.local:5000' target="_blank">Sensor 3</a></li>
+      <li><a href='http://pi4.local:5000' target="_blank">Sensor 4</a></li>
+      <li><a href='http://pi5.local:5000' target="_blank">Sensor 5</a></li>
+      <li><a href='http://pi6.local:5000' target="_blank">Sensor 6</a></li>
+      <li><a href='http://pi7.local:5000' target="_blank">Sensor 7</a></li>
+      <li><a href='http://pi8.local:5000' target="_blank">Sensor 8</a></li>
+      <li><a href='http://kasa.local:5000' target="_blank">Smart Plugs</a></li>
+  </div>
+
+
+  <script src="/js/plotTempData.js"></script>
+  <script src="/js/plotPowerData.js"></script>
+
+</body>
+</html>
