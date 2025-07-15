@@ -62,6 +62,7 @@ HTML = """
             <li>View most recently collected data with /api/data?date=now</li>
             <li>Download CSV file with /api/data?date=YYYY-MM-DD (Replace YYYY-MM-DD with date as shown in file list.)</li>
             <li>View Raspberry Pi health status with /api/health</li>
+            <li>View location of device (as specified in the config file) /api/location</li>
         </ul>
     </p>
     <h2>Today's Data</h2>

@@ -9,6 +9,8 @@ hostNames = []
 for s in range(1,9):
     hostNames.append('pi' + str(s) + ".local")
 
+hostNames.append('kasa' + str(s) + ".local")
+
 #print(hostNames)
 
 # URL of the API that returns CSV data
