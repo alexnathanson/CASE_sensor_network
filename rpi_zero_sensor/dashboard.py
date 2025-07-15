@@ -146,7 +146,7 @@ def list_csv_files():
     return jsonify(filenames)
 
 @app.route("/api/location")
-def list_csv_files():
+def getLocation():
     return location
 
 def parse_disk_usage():
