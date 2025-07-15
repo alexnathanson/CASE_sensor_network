@@ -52,10 +52,17 @@ HTML = """
 </head>
 <body>
     <h1>Pi Zero W2 SHT31D Sensor Dashboard</h1>
+    <h2>API</h2>
     <p>
-        Download CSV file with /api/data?date=YYYY-MM-DD<br>
-        View file list with /api/files
+        There are 3 API endpoints - files, data, and health.
+        <ul>
+            <li>View file list with /api/files</li>
+            <li>View most recently collected data with /api/data?date=now</li>
+            <li>Download CSV file with /api/data?date=YYYY-MM-DD (Replace YYYY-MM-DD with date as shown in file list.)</li>
+            <li>View Raspberry Pi health status with /api/health</li>
+        </ul>
     </p>
+    <h2>Today's Data</h2>
     <table>
         <tr><th>Timestamp</th><th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th></tr>
         {% for row in data %}

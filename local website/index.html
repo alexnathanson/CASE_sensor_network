@@ -5,15 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Live</title>
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+  <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 <body>
   <h2>Live Data from Sensors</h2>
   <p>
-    <a href="/index.html?data=sensor">Live Sensor Data</a> | <a href="/historic.html">Historic Sensor Data</a> | <a href="/index.html?data=health">Health Check</a>
+    <a href="/index.html">Time-Series Sensor Data</a> | <a href="/live.html?data=sensor">Live Sensor Data</a> | <a href="/live.html?data=health">Health Check</a>
   </p>
-  <div id="results">Loading...</div>
+  <!-- <div id="results">Loading...</div> -->
   <!-- <canvas id="timeseriesChart" width="800" height="400"></canvas> -->
 
-  <script src="/js/collect.js"></script>
+  <div id="results">
+    <h2>Temperature Data (Fahrenheit)</h2>
+    <div id="plotT" style="width:100%;height:600px;"></div>
+    <h2>Power Data (Watts)</h2>
+    <div id="plotP" style="width:100%;height:600px;"></div>
+    </div>
+  </div>
+
+
+  <script src="/js/plotTempData.js"></script>
+  <script src="/js/plotPowerData.js"></script>
+
 </body>
 </html>

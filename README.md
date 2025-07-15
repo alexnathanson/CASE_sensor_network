@@ -37,6 +37,10 @@ The device running Airtable (the Kasa RPi in most cases):
 When on network, log in to router via a browser with http://tplinkeap.net/ <Br>
 See Google Doc for log info.
 
+## Collecting Data
+
+The easiest way to collect data locally is by downloading files from each device's web interface.
+
 ## Troubleshooting
 
 All devices can be found via ssh or ping with their hostname i.e. pi1.local, or via a browser or curl with http://pi1.local:5000.
@@ -45,9 +49,9 @@ If that doesn't work, log in to WAP via browser, http://tplinkeap.net/.
 
 ## To do
 
-* plot timer series data on device dashboard
 * check that file status in health is accounting for everything missing, not just from start file
-* plot time series data for all devices on local network page
 * test that windows device is archiving properly
-* print remaining cases (~4) and resolder sensors
+* print remaining cases (~4)
 * finish documentation
+	* instructions for retrieving data
+	* build it into interface?
