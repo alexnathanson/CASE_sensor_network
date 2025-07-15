@@ -4,30 +4,13 @@ This set of scripts is intended to run a local Windows machine to backup data fr
 
 This is done with the rpi_data_collector.py script.
 
+The best way to automatically run the script is with NSSM.
+
 ## Installation
 
 `git clone https://github.com/alexnathanson/CASE_sensor_network`
 
-`python -m venv venv`
-
-`venv\Scripts\activate`
-
-Install requirements from windows_collector directory<br>
-`pip install -r requirements.txt`
-
-* Download NSSM
-* Place nssm.exe in nssm folder in programs directory
-* add to environment paths
-* open temrinal as admin
-	* `nssm install KasaLogger`
-	* path is path to python.exe in venv
-	* startup directory is windows_collector\
-	* arg is path to kasa_logger.py
-	* start service with `nssm start KasaLogger`
-	* check status with task manager (might just show up as python) or `nssm status KasaLogger`
-## Automation
-
-The python scripts are run via Windows Task Scheduler
+Python scripts can be run via Windows Task Scheduler
 
 General
 * Name the task
@@ -43,3 +26,24 @@ Conditions
 Settings
 * run task as soon as possible
 
+## Alternative Automation Method
+
+You can also run the script with NSSM, but this isn't fully tested and is more meant for services not running once a day like this program.
+
+`python -m venv venv`
+
+`venv\Scripts\activate`
+
+Install requirements from windows_collector directory<br>
+`pip install -r requirements.txt`
+
+* Download NSSM
+* Place nssm.exe in nssm folder in programs directory
+* add to environment paths
+* open temrinal as admin
+	* `nssm install rpi_data_collector`
+	* path is path to python.exe in venv
+	* startup directory is windows_collector\
+	* arg is path to rpi_data_collector.py
+	* start service with `nssm start rpi_data_collector`
+	* check status with task manager (might just show up as python) or `nssm status rpi_data_collector`

@@ -50,8 +50,4 @@ If that doesn't work, log in to WAP via browser, http://tplinkeap.net/.
 ## To do
 
 * check that file status in health is accounting for everything missing, not just from start file
-* test that windows device is archiving properly
-* print remaining cases (~4)
-* finish documentation
-	* instructions for retrieving data
-	* build it into interface?
+* test that windows device is archiving properly - it should check for missing files and try to fill gaps
