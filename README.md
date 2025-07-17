@@ -61,15 +61,10 @@ If that doesn't work, log in to wireless access point via a browser, http://tpli
 
 ## To do
 
-* viz humidity
 * test that windows device is archiving properly
-	* it should check for missing files and try to fill gaps
 	* turn off autoupdating
-* setup airtable account
-* stretch goals:
 	* Windows device should backfil missing files
 * final updates
-	* heath start date
+	* health start date
 	* location
-
 * update rpi readme-dashboard and api section

@@ -13,7 +13,7 @@ function doubleDate(s){
 }
 
 // Download CSV file with /api/data?date=YYYY-MM-DD
-let hist = 3; // days of history to display
+let hist = 1; // days of history to display
 let dateArray = []
 let dayDelta =  1000 * 60 *60 * 24
 for (let dd = hist-1; dd >= 0; dd--){
@@ -35,7 +35,7 @@ for (let e = 1; e < 9; e++){
 
 //apiEndpoints.push('http://kasa.local:5000/api/'+endPt)
 
-async function fetchAndParseCSV(url) {
+async function fetchAndParseCSV(url,s) {
   const time = [];
   const temp = [];
   for (let d in dateArray){ 
@@ -46,7 +46,15 @@ async function fetchAndParseCSV(url) {
 
     const headers = rows[0];
     const timeIndex = headers.findIndex(h => h.toLowerCase().includes('datetime'));
-    const tempIndex = headers.findIndex(h => h.includes('tempF'));
+
+    let tempIndex;
+    if (s == 'f'){
+       tempIndex = headers.findIndex(h => h.includes('tempF'));
+    } else if (s == 'c'){
+      tempIndex = headers.findIndex(h => h.includes('tempC'));
+    } else if (s == 'h'){
+      tempIndex = headers.findIndex(h => h.includes('humidity'));
+    }
 
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
@@ -59,16 +67,16 @@ async function fetchAndParseCSV(url) {
     }
   }
 
-  console.log(temp)
   return { time, temp };
 }
 
-async function plotTempData() {
+async function plotTempData(s) {
   const traces = [];
-
+  //let allData = []
   for (let i = 0; i < apiEndpoints.length; i++) {
     try {
-      const data = await fetchAndParseCSV(apiEndpoints[i]);
+      const data = await fetchAndParseCSV(apiEndpoints[i],s);
+      //allData.push(data)
       traces.push({
         x: data.time,
         y: data.temp,
@@ -80,11 +88,44 @@ async function plotTempData() {
     }
   }
 
-  Plotly.newPlot('plotT', traces, {
-    title: 'Temperature (°F) Over Time',
+  //get averages
+  let avgData = []
+  let avgTime = []
+
+  console.log(traces)
+  for (let a=0;a<traces[0].x.length;a++){// for each reading
+    av = 0
+    for (let d=0;d<traces.length;d++){// for each device
+      av = av + traces[d]['y'][a]
+    }
+    avgData.push(av/traces.length)
+    avgTime.push(traces[0]['x'][a])
+  }
+  traces.push({
+        x: avgTime,
+        y: avgData,
+        mode: 'lines',
+        name: `Rough Average`,
+        line: {color: 'black'}});
+
+  if (s == 'f'){
+    t = 'Temperature (°F)'
+    p = 'plotF'
+  } else if (s == 'c'){
+    t = 'Temperature (°C)'
+    p = 'plotC'
+  } else if (s == 'h'){
+    t = 'Humidity'
+    p = 'plotH'
+  }
+
+  Plotly.newPlot(p, traces, {
+    title: t + ' Over Time',
     xaxis: { title: 'Time' },
-    yaxis: { title: 'Temperature (°F)' }
+    yaxis: { title: t }
   });
 }
 
-plotTempData();
+plotTempData('f');
+plotTempData('c');
+plotTempData('h');
