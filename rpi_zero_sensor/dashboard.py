@@ -64,11 +64,11 @@ HTML = """
     <p>
         There are 4 API endpoints - files, data, and health.
         <ul>
-            <li>View file list with <a href='/api/files'>/api/files</a></li>
-            <li>View most recently collected data with <a href='/api/data?date=now'>/api/data?date=now</a></li>
+            <li>View file list with <a href='/api/files' target="_blank">/api/files</a></li>
+            <li>View most recently collected data with <a href='/api/data?date=now' target="_blank">/api/data?date=now</a></li>
             <li>Download CSV file with /api/data?date=YYYY-MM-DD (Replace YYYY-MM-DD with date as shown in file list.)</li>
-            <li>View Raspberry Pi health status with <a href='/api/health'>/api/health</a></li>
-            <li>View location of device (as specified in the config file) <a href='/api/location'>/api/location</a></li>
+            <li>View Raspberry Pi health status with <a href='/api/health' target="_blank">/api/health</a></li>
+            <li>View location of device (as specified in the config file) <a href='/api/location' target="_blank">/api/location</a></li>
         </ul>
     </p>
     <h2>Today's Data</h2>
@@ -102,11 +102,10 @@ DOWNLOAD = """
 </head>
 <body>
     <h1>Pi Zero W2 SHT31D Sensor Dashboard</h1>
-    <h2>CSV File Download</h2>
     <p>
         <a href='/'>home</a>
     </p>
-    <h2>Available Files</h2>
+    <h2>Available CSV Files to Download</h2>
     <table>
         <tr><th>Name</th></tr>
         {% for row in data %}
@@ -140,15 +139,9 @@ def download():
     files = sorted(glob.glob(file_pattern))
 
     # Return just the filenames (without full paths)
-    rows = [os.path.basename(f).split('_')[1] for f in files]
+    rows = [[os.path.basename(f).replace('.csv','').split('_')[1]] for f in files]
 
-
-    # with open(fileName, newline='') as f:
-    #     reader = csv.reader(f)
-    #     next(reader)  # skip header
-    #     rows = list(reader)#[-10:]  # last 10 readings
     return render_template_string(DOWNLOAD, data=rows)
-
 
 @app.route("/api/data")
 def get_csv_for_date():
