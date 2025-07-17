@@ -52,6 +52,8 @@ Create .env file if accessing either the Kasa or Airtable APIs.
 Run automated installer script (most recent version isn't tested):<br>
 `sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/installer.sh`
 
+After install, update the file start date and location in the config file as necessary.
+
 ### Steps included in automated installation via utilities/installer.sh
 The following code does not need to be done manually, because it is included in script.
 

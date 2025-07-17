@@ -1,22 +1,30 @@
 # Windows Installation
 
-This set of scripts is intended to run a local Windows machine to backup data from all sensors.
+This scripts is intended to run a local Windows machine to backup data from all sensors.
 
 This is done with the rpi_data_collector.py script.
 
-The best way to automatically run the script is with NSSM.
+The best way to automatically run the script is with the Windows Task Scheduler.
+
+Additionally, the local website should be running the this laptop. See <a href='https://github.com/alexnathanson/CASE_sensor_network/tree/main/local_website'>https://github.com/alexnathanson/CASE_sensor_network/tree/main/local_website</a>.
 
 ## Installation
 
-`git clone https://github.com/alexnathanson/CASE_sensor_network`
+1) Clone the repository: `git clone https://github.com/alexnathanson/CASE_sensor_network`
+2) Create the virtual environment: `python -m venv venv`
+3) Activate the virtual environment: `venv\Scripts\activate`
+4) Navigate to the windows_collector directory and install requirements:
+`pip install -r requirements.txt`
+5) Schedule tasks to run via Windows Task Scheduler.
 
+### Windows Task Scheduler
 Python scripts can be run via Windows Task Scheduler
 
 General
 * Name the task
 * Set to run whether user is logged in or not
 Triggers
-* Set to daily
+* Set to daily. Around 1am is a good time, because all the sensors will have completed their daily reboot by then.
 Actions
 * set the script to the python.exe file in your venv
 * add the script's full filepath as an argument
@@ -29,13 +37,6 @@ Settings
 ## Alternative Automation Method
 
 You can also run the script with NSSM, but this isn't fully tested and is more meant for services not running once a day like this program.
-
-`python -m venv venv`
-
-`venv\Scripts\activate`
-
-Install requirements from windows_collector directory<br>
-`pip install -r requirements.txt`
 
 * Download NSSM
 * Place nssm.exe in nssm folder in programs directory

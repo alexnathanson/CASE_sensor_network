@@ -59,7 +59,7 @@ HTML = """
     </p>
     <h2>Retrieving Data</h2>
     <p>
-        The best ways to retrieve sensor data are manually <a href="/download">on this page</a> or programatical via the API. Additional methods are described in the Github repository.
+        The best ways to retrieve sensor data are manually <a href="/download">on this page</a> or programatically via the API. Additional methods are described in the Github repository.
     </p>
     <p>
         There are 4 API endpoints - files, data, and health.
