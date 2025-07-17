@@ -14,5 +14,5 @@ venv/*
 .env
 
 data/*
-archive/*
-windows_collector/archive/*
+# archive/*
+# windows_collector/archive/*
