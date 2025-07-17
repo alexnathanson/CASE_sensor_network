@@ -14,5 +14,13 @@ venv/*
 .env
 
 data/*
-archive/*
-windows_collector/archive/*
+
+archive/pi1/*
+archive/pi2/*
+archive/pi3/*
+archive/pi4/*
+archive/pi5/*
+archive/pi6/*
+archive/pi7/*
+archive/pi8/*
+archive/kasa/*
