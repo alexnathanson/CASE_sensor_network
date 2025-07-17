@@ -41,6 +41,8 @@ See Google Doc for log info.
 
 The easiest way to collect data locally is by downloading files from each device's web interface.
 
+1 complete CSV file from the 8 sensors should be about 23kb.
+
 ## Troubleshooting
 
 All devices can be found via ssh or ping with their hostname i.e. pi1.local, or via a browser or curl with http://pi1.local:5000.
@@ -50,4 +52,12 @@ If that doesn't work, log in to WAP via browser, http://tplinkeap.net/.
 ## To do
 
 * check that file status in health is accounting for everything missing, not just from start file
-* test that windows device is archiving properly - it should check for missing files and try to fill gaps
+* test that windows device is archiving properly
+	* it should check for missing files and try to fill gaps
+	* turn off autoupdating
+* setup airtable account
+* stretch goals:
+	* interface for downloading files
+	* Windows device should backfil missing files
+* final updates
+	* heath start date

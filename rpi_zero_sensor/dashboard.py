@@ -54,15 +54,21 @@ HTML = """
 </head>
 <body>
     <h1>Pi Zero W2 SHT31D Sensor Dashboard</h1>
-    <h2>API</h2>
     <p>
-        There are 3 API endpoints - files, data, and health.
+        Project documentation can be found at <a href="https://github.com/alexnathanson/CASE_sensor_network/" target="_blank">https://github.com/alexnathanson/CASE_sensor_network/</a>
+    </p>
+    <h2>Retrieving Data</h2>
+    <p>
+        The best ways to retrieve sensor data are manually <a href="/download">on this page</a> or programatical via the API. Additional methods are described in the Github repository.
+    </p>
+    <p>
+        There are 4 API endpoints - files, data, and health.
         <ul>
-            <li>View file list with /api/files</li>
-            <li>View most recently collected data with /api/data?date=now</li>
+            <li>View file list with <a href='/api/files'>/api/files</a></li>
+            <li>View most recently collected data with <a href='/api/data?date=now'>/api/data?date=now</a></li>
             <li>Download CSV file with /api/data?date=YYYY-MM-DD (Replace YYYY-MM-DD with date as shown in file list.)</li>
-            <li>View Raspberry Pi health status with /api/health</li>
-            <li>View location of device (as specified in the config file) /api/location</li>
+            <li>View Raspberry Pi health status with <a href='/api/health'>/api/health</a></li>
+            <li>View location of device (as specified in the config file) <a href='/api/location'>/api/location</a></li>
         </ul>
     </p>
     <h2>Today's Data</h2>
@@ -82,6 +88,37 @@ HTML = """
 </html>
 """
 
+DOWNLOAD = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pi Sensor Dashboard</title>
+    <meta http-equiv="refresh" content="60" />
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        table { border-collapse: collapse; }
+        td, th { padding: 0.5em; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Pi Zero W2 SHT31D Sensor Dashboard</h1>
+    <h2>CSV File Download</h2>
+    <p>
+        <a href='/'>home</a>
+    </p>
+    <h2>Available Files</h2>
+    <table>
+        <tr><th>Name</th></tr>
+        {% for row in data %}
+        <tr>
+            <td><a href="/api/data?date={{ row[0] }}" target="_blank">{{ row[0] }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+"""
+
 if deviceNum == 'kasa':
     HTML = HTML.replace("<th>Temp (°C)</th><th>Temp (°F)</th><th>Humidity (%)</th>","<th>Kasa1 W</th><th>Kasa2 W</th><th>Kasa3 W</th><th>Kasa4 W</th>")
     HTML = HTML.replace("<td>{{ row[3] }}</td>","<td>{{ row[3] }}</td><td>{{ row[4] }}</td>")
@@ -94,6 +131,23 @@ def index():
         next(reader)  # skip header
         rows = list(reader)#[-10:]  # last 10 readings
     return render_template_string(HTML, data=rows)
+
+
+@app.route("/download")
+def download():
+    # Get all CSV files in the data/ directory
+    file_pattern = os.path.join(filePath, f"{filePrefix}*.csv")
+    files = sorted(glob.glob(file_pattern))
+
+    # Return just the filenames (without full paths)
+    rows = [os.path.basename(f).split('_')[1] for f in files]
+
+
+    # with open(fileName, newline='') as f:
+    #     reader = csv.reader(f)
+    #     next(reader)  # skip header
+    #     rows = list(reader)#[-10:]  # last 10 readings
+    return render_template_string(DOWNLOAD, data=rows)
 
 
 @app.route("/api/data")
@@ -119,12 +173,6 @@ def get_csv_for_date():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     else:
-        # untested
-        # test = date.split('-')
-        # for i in test:
-        #     if type(i) != int:
-        #         return "Please provide a date using ?date=YYYY-MM-DD or use ?date=now for most recent data", 400
-
         fileName = filePrefix +date+'.csv'
         fullFilePath = filePath + fileName #os.path.join(fileName)
 

@@ -2,14 +2,15 @@ import requests
 import datetime
 import os
 import json
+import time
 
 # RPi Sensor Host Names
 hostNames = []
 
 for s in range(1,9):
-    hostNames.append('pi' + str(s) + ".local")
+    hostNames.append('pi' + str(s) + '.local')
 
-hostNames.append('kasa' + str(s) + ".local")
+hostNames.append('kasa' + '.local')
 
 #print(hostNames)
 
@@ -17,20 +18,20 @@ hostNames.append('kasa' + str(s) + ".local")
 port = 5000
 endPoint = "/api/files?date="
 
-def fetchRPi(url, headers):
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raises HTTPError for bad responses
+def fetchRPi(url, headers,backoff:int=1):
+    max_tries = 3
+    for attempt in range(max_tries):
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()  # Raises HTTPError for bad responses
+            return response.content
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
-        data = response.content
-        return data
+        if attempt < max_tries: # try up to 3 times
+            time.sleep(1+(int(backoff)* int(attempt)))
 
-    except requests.RequestException as e:
-        print(f"Request failed: {e}")
-    except json.JSONDecodeError:
-        print("Failed to decode JSON from the response.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    return None
 
 def archiveCSV(data, directory, filename):
     if not data or len(data) == 0:

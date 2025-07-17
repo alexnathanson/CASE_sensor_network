@@ -46,6 +46,11 @@ Outside of the local network, data can be check via the Airtable API.
 
 ## Airtable
 
+Only 1 account updates the airtable. With a free account, we're limited to 1000 API calls a month (~33 calls/ day). 
+
+When both script start, they retrieve record IDs (9 calls). Then it updates data as a batch, to minimize calls. The live script makes 1 update every 2 hours, for a total of 21 calls/day. The status script makes 1 update a day, for a total of 9 calls/ day. This requires a combined 30 API calls/ day, for ~930 calls/ month. With a paid account, the resolution can be increased if necessary.
+
+
 ## Troubleshooting
 
 

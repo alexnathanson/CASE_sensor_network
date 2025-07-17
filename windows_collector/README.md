@@ -18,7 +18,7 @@ General
 Triggers
 * Set to daily
 Actions
-* set the script tp the python.exe file in your venv
+* set the script to the python.exe file in your venv
 * add the script's full filepath as an argument
 * start in specifies the directory it starts from
 Conditions

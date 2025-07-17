@@ -32,7 +32,7 @@ except Exception as e:
 # mode: 1 = only individual data; 8 = all data
 MODE = 8
 
-FREQ_SECONDS = 60 * 60
+#FREQ_SECONDS = 60 * 60
 
 async def send_get_request(url,type:str,backoff:int=1,timeout:int=1) -> Any:
     """Send GET request to the IP."""
