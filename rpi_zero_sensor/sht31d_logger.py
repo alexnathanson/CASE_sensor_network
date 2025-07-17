@@ -73,7 +73,7 @@ def main():
 				print(e)
 				newDF.to_csv(fileName, sep=',',index=False)
 
-		time.sleep(5)
+		time.sleep(10)
 
 if __name__ == "__main__":
 	main()
