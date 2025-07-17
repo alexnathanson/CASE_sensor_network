@@ -41,7 +41,7 @@ def main():
 		#collect data every 5 minutes
 		if time.time() - freq > startTime:
 			startTime = time.time()
-			logging.debug(startTime)
+			logging.debug(f'loop start: {startTime}')
 
 			tempC = sum(tempC_list)/len(tempC_list)
 			humidity = sum(humidity_list)/len(humidity_list)
