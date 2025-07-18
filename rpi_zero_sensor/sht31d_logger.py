@@ -14,6 +14,7 @@ with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
 
 deviceNum = config["sensor"]["number"]
+offset = config["sensor"]["offsetC"]
 freq = int(config["sensor"]["frequency_seconds"])
 
 readings = 10
@@ -30,6 +31,7 @@ def cToF(c):
 def main():
 	tempC_list = []
 	humidity_list = []
+	tempC_offset_list = []
 
 	startTime = 0
 	while True:
@@ -37,6 +39,7 @@ def main():
 		#for r in range(readings):
 		tempC_list.append(sensor.temperature)
 		humidity_list.append(sensor.relative_humidity)
+		tempC_offset_list.append(sensor.temperature + offset)
 
 		#collect data every 5 minutes
 		if time.time() - freq > startTime:
@@ -44,16 +47,19 @@ def main():
 			logging.debug(f'loop start: {startTime}')
 
 			tempC = sum(tempC_list)/len(tempC_list)
+			tempC_offset = sum(tempC_offset_list)/len(tempC_offset_list)
 			humidity = sum(humidity_list)/len(humidity_list)
 
 			tempC_list = []
 			humidity_list = []
+			tempC_offset_list = []
 
 			tempF = cToF(tempC)
 
 			newDF = pd.DataFrame(data={
 				"datetime" : [datetime.datetime.now()],
 				"tempC": tempC,
+				"tempC_offset": tempC_offset,
 				"tempF": tempF,
 				"humidityP": humidity})
 

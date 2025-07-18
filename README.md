@@ -64,7 +64,7 @@ If that doesn't work, log in to wireless access point via a browser, http://tpli
 * test that windows device is archiving properly
 	* turn off autoupdating
 	* Windows device should backfil missing files
-* final updates
+* final updates for RPis
 	* health start date
 	* location
 * update rpi readme-dashboard and api section

@@ -8,6 +8,8 @@ The best way to automatically run the script is with the Windows Task Scheduler.
 
 Additionally, the local website should be running the this laptop. See <a href='https://github.com/alexnathanson/CASE_sensor_network/tree/main/local_website'>https://github.com/alexnathanson/CASE_sensor_network/tree/main/local_website</a>.
 
+The local website should also be running on this device. Use port 8888 when using Windows Task Scheduler.
+
 ## Installation
 
 1) Clone the repository: `git clone https://github.com/alexnathanson/CASE_sensor_network`
