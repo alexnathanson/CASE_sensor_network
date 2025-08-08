@@ -61,10 +61,13 @@ If that doesn't work, log in to wireless access point via a browser, http://tpli
 
 ## To do
 
-* test that windows device is archiving properly
+* Fix Airtable updating issue!!!
+* Windows device
 	* turn off autoupdating
 	* Windows device should backfil missing files
-* final updates for RPis
+	* install Team Viewer
+* Add calibration
+* Final updates for RPis
 	* health start date
 	* location
 * update rpi readme-dashboard and api section

@@ -40,6 +40,8 @@ async def main():
 
     files = []
 
+    # TO DO - DONT DO IT THIS WAY!!! - COLLECT 'now' over an hour-ish
+
     #1 pull the files for a specific date from all sensors
     for n in range(8):
         url = f"http://pi{n+1}.local:5000/api/data?date={dataDate}"
