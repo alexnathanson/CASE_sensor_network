@@ -54,9 +54,9 @@ Run automated installer script (most recent version isn't tested):<br>
 
 After install, update the file start date and location in the config file as necessary.
 
-Add this line to the bottom of the crontab file to pull newest version and restart nightly
+Add this line to the bottom of the crontab file to pull newest version and restart nightly. (It also restarts ~3am, which is kind of redundant)
 * `crontab -e`
-* `10 0 * * * bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/update.sh > /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/update.log 2>&1`
+* `10 0 * * * sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/simple-update.sh > /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/simple-update.log 2>&1`
 
 ### Steps included in automated installation via utilities/installer.sh
 The following code does not need to be done manually, because it is included in script.
