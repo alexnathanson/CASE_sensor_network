@@ -17,6 +17,8 @@ Logger collects the data and stores it as a CSV. Dashboard makes the data availa
 
 Note that it is crucial that the host name of each Pi is unique and follows the naming convention. Also, the config file should be updated with the correct number. This should be done automatically if using the installation script. The kasa device is named kasa and the value entered into the config file should be 'kasa'.
 
+Also, each device has a bash script the runs around midnight which pulls the most recent version of the code base from Git.
+
 ## Installation
 
 See <a href='https://github.com/alexnathanson/CASE_sensor_network/blob/main/rpi_zero_sensor/installation.md'>installation doc</a>.
