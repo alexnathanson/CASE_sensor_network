@@ -290,6 +290,18 @@ def check_mmc_errors():
 
     return warnings
 
+def getServiceStatus(service):
+    try:
+        result = subprocess.run(
+            ['systemctl', 'is-active', service],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        return result.stdout.strip()
+    except Exception as e:
+        return f'Error: {str(e)}'
+
 @app.route("/api/health")
 def health_check():
     # any run_command can also be entered manually in terminal
@@ -341,6 +353,14 @@ def health_check():
     except Exception as e:
         fileStatus = f"error: {str(e)}"
 
+    try:
+        serviceList = ['airtable_live','airtable_status','dashboard','kasa_logger','sht31d_logger']
+        serviceDict = {}
+        for s in serviceList:
+            serviceDict[s] = getServiceStatus(s)
+    except Exception as e:
+        serviceDict = f"error:{str(e)}"
+
     return jsonify({
         "datetime": dt.strftime("%Y-%m-%d %H:%M:%S"),
         "cpu_tempC": cpu_tempC,
@@ -349,7 +369,8 @@ def health_check():
         "diskUsage" : diskUsage,
         "powerIssues" : powerIssues,
         "sdCardErrors" : sdCardErrors,
-        "fileStatus":fileStatus
+        "fileStatus":fileStatus,
+        "services":serviceDict
     })
 
 if __name__ == "__main__":
