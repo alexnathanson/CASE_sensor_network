@@ -63,7 +63,7 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
     return res
 
 async def main():
-    AT = Airtable(key,'live')
+    AT = Airtable(key,'liveCopy')
 
     # get record IDs once at start to minimize API calls
     if MODE == 1:
