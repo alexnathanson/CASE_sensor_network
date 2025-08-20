@@ -361,6 +361,56 @@ def health_check():
     except Exception as e:
         serviceDict = f"error:{str(e)}"
 
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd='/home/drux/demandResponse_UX_research').decode().strip()
+    except Exception as e:
+        commit = f"errpr{str(e)}"
+
+    try:
+        branch = subprocess.check_output(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd='/home/drux/demandResponse_UX_research').decode().strip()
+    except Exception as e:
+        branch = f"errpr{str(e)}"
+
+    liveLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable-live.log'
+    statusLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable-status.log'
+    try:
+        # past 3 dates in format (YYYY-MM-DD)
+        logDates = []
+        duration = 4
+        for d in range(duration):
+            dt = date.today()-timedelta(days=duration-d-1)
+            logDates.append(dt.strftime("%Y-%m-%d"))
+        logging.info(f'dates:{logDates}')
+
+        # get live logs
+        try:
+            liveLog = []
+            with open(displayLogFile, "r", encoding="utf-8") as f:
+                for line in f:
+                    for d in logDates:
+                        if d in line and ("ERROR" in line or "CRITICAL" in line):
+                            liveLog.append(line.strip())
+        except Exception as e:
+            liveLog = f"Error getting live log: {e}"
+
+        # get status logs
+        try:
+            statusLog = []
+            with open(displayLogFile, "r", encoding="utf-8") as f:
+                for line in f:
+                    for d in logDates:
+                        if d in line and ("ERROR" in line or "CRITICAL" in line):
+                            statusLog.append(line.strip())
+        except Exception as e:
+            statusLog = f"Error getting status log: {e}"
+    except Exception as e:
+        liveLog = f"Error getting all logs: {e}"
+        statusLog = liveLog
+
     return jsonify({
         "datetime": dt.strftime("%Y-%m-%d %H:%M:%S"),
         "cpu_tempC": cpu_tempC,
@@ -370,7 +420,11 @@ def health_check():
         "powerIssues" : powerIssues,
         "sdCardErrors" : sdCardErrors,
         "fileStatus":fileStatus,
-        "services":serviceDict
+        "services":serviceDict,
+        "branch":branch,
+        "commit":commit,
+        "liveLog":liveLog,
+        "statusLog":statusLog
     })
 
 if __name__ == "__main__":
