@@ -85,7 +85,7 @@ async def main():
     while True:
         # check for update once an hour
         try:
-            if count % 2==0:#(60/(freq/60)) == 0:
+            if count % 1==0:#(60/(freq/60)) == 0:
                 getUpdate()
         except Exception as e:
             logging.error(f'Error updating: {e}')
