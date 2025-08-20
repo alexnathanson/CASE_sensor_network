@@ -389,7 +389,7 @@ def health_check():
         # get live logs
         try:
             liveLog = []
-            with open(displayLogFile, "r", encoding="utf-8") as f:
+            with open(liveLogFile, "r", encoding="utf-8") as f:
                 for line in f:
                     for d in logDates:
                         if d in line and ("ERROR" in line or "CRITICAL" in line):
@@ -400,7 +400,7 @@ def health_check():
         # get status logs
         try:
             statusLog = []
-            with open(displayLogFile, "r", encoding="utf-8") as f:
+            with open(statusLogFile, "r", encoding="utf-8") as f:
                 for line in f:
                     for d in logDates:
                         if d in line and ("ERROR" in line or "CRITICAL" in line):
