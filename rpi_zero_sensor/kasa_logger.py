@@ -83,9 +83,9 @@ async def main():
 
     count = 0
     while True:
-        # check for update once an hour
+        # check for update every 20 minutes
         try:
-            if count % 1==0:#(60/(freq/60)) == 0:
+            if count % 2==0:#(20/(freq/60)) == 0:
                 getUpdate()
         except Exception as e:
             logging.error(f'Error updating: {e}')
