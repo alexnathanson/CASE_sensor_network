@@ -364,14 +364,14 @@ def health_check():
     try:
         commit = subprocess.check_output(
             ["git", "rev-parse", "--short", "HEAD"],
-            cwd='/home/drux/demandResponse_UX_research').decode().strip()
+            cwd='/home/case/CASE_sensor_network').decode().strip()
     except Exception as e:
         commit = f"errpr{str(e)}"
 
     try:
         branch = subprocess.check_output(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-            cwd='/home/drux/demandResponse_UX_research').decode().strip()
+            cwd='/home/case/CASE_sensor_network').decode().strip()
     except Exception as e:
         branch = f"errpr{str(e)}"
 
