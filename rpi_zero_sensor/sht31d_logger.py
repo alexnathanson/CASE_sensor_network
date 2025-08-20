@@ -7,8 +7,10 @@ import pandas as pd
 import datetime
 import json
 import logging
+import subprocess
 
-logging.basicConfig(level=logging.INFO)
+#logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/sht31d.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.INFO)
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
@@ -24,6 +26,24 @@ sensor = adafruit_sht31d.SHT31D(i2c)
 
 sensor.mode = adafruit_sht31d.MODE_SINGLE
 
+def getUpdate()->None:
+    result = subprocess.run(
+            ['sudo','git','pull'],
+            cwd='/home/drux/demandResponse_UX_research',
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+    logging.debug(result)
+
+    if not 'Already up to date' in result.stdout:
+        logging.info('Pulled update... rebooting now')
+        os.system('sudo reboot')
+    else:
+        logging.debug('Already up to date :)')
+
+    return None
+
 # convert celcius to farenheit
 def cToF(c):
 	return c * (9/5) + 32
@@ -34,7 +54,14 @@ def main():
 	tempC_offset_list = []
 
 	startTime = 0
+
+	count = 0
 	while True:
+
+		# check for update once an hour
+		if count % 6 == 0:
+			getUpdate()
+		count = count + 1
 
 		#for r in range(readings):
 		tempC_list.append(sensor.temperature)

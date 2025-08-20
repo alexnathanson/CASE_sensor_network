@@ -106,7 +106,7 @@ async def main():
                 url = f"http://kasa.local:5000/api/data?date=now"
                 now.append(await send_get_request(url,'json'))
 
-            print(now)
+            logging.debug(AT.names)
             try:
                 await AT.updateBatch(AT.names,AT.IDs,now)
             except Exception as e:

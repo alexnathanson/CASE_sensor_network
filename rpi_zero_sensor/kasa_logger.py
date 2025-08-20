@@ -8,9 +8,11 @@ import asyncio
 from kasa import Discover, Credentials
 import logging
 import pandas as pd
+import subprocess
 
 # ------------------ Config ------------------ #
-logging.basicConfig(level=logging.INFO)
+#logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/kasa.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.INFO)
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
@@ -61,9 +63,33 @@ async def discoverAll():
 
     return dataDF
 
+def getUpdate()->None:
+    result = subprocess.run(
+            ['sudo','git','pull'],
+            cwd='/home/drux/demandResponse_UX_research',
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+    logging.debug(result)
+
+    if not 'Already up to date' in result.stdout:
+        logging.info('Pulled update... rebooting now')
+        os.system('sudo reboot')
+    else:
+        logging.debug('Already up to date :)')
+
+    return None
+
 async def main():
 
+    count = 0
     while True:
+        # check for update once an hour
+        if count % (60/(freq/60)) == 0:
+            getUpdate()
+        count = count + 1
+
         power_data = await discoverAll()
 
         logging.debug(power_data)
