@@ -64,7 +64,7 @@ async def discoverAll():
 def getUpdate()->None:
     result = subprocess.run(
             ['sudo','git','pull'],
-            cwd='/home/drux/demandResponse_UX_research',
+            cwd='/home/case/CASE_sensor_network',
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True
@@ -84,8 +84,12 @@ async def main():
     count = 0
     while True:
         # check for update once an hour
-        if count % 2==0:#(60/(freq/60)) == 0:
-            getUpdate()
+        try:
+            if count % 2==0:#(60/(freq/60)) == 0:
+                getUpdate()
+        except Exception as e:
+            logging.error(f'Error updating: {e}')
+
         count = count + 1
 
         power_data = await discoverAll()

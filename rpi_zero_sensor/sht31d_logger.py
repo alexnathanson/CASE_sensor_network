@@ -29,7 +29,7 @@ sensor.mode = adafruit_sht31d.MODE_SINGLE
 def getUpdate()->None:
     result = subprocess.run(
             ['sudo','git','pull'],
-            cwd='/home/drux/demandResponse_UX_research',
+            cwd='/home/case/CASE_sensor_network',
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True
@@ -60,7 +60,10 @@ def main():
 
 		# check for update once an hour
 		if count % 6 == 0:
-			getUpdate()
+			try:
+				getUpdate()
+			except Exception as e:
+				logging.error(f'Error updating: {e}')
 		count = count + 1
 
 		#for r in range(readings):
