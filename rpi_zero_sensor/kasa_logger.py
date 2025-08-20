@@ -18,8 +18,6 @@ with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
 freq = int(config["sensor"]["frequency_seconds"])
 
-# deviceNum = config["sensor"]["number"]
-
 # ------------------ Environmental Variables ------------------ #
 load_dotenv()
 un = os.getenv('KASA_UN')
