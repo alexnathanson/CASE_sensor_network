@@ -86,7 +86,7 @@ async def main():
     count = 0
     while True:
         # check for update once an hour
-        if count % (60/(freq/60)) == 0:
+        if count % 2==0:#(60/(freq/60)) == 0:
             getUpdate()
         count = count + 1
 

@@ -2,7 +2,7 @@ from flask import Flask, render_template_string, request, send_file, abort, json
 from flask_cors import CORS
 import csv
 import datetime
-from datetime import timedelta
+from datetime import timedelta, date
 import os 
 import glob
 import json
