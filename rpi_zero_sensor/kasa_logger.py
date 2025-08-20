@@ -69,13 +69,13 @@ def getUpdate()->None:
             stderr=subprocess.PIPE,
             text=True
         )
-    logging.debug(result)
+    logging.info(result)
 
     if not 'Already up to date' in result.stdout:
         logging.info('Pulled update... rebooting now')
         os.system('sudo reboot')
     else:
-        logging.debug('Already up to date :)')
+        logging.info('Already up to date :)')
 
     return None
 
