@@ -65,7 +65,7 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
     return res
 
 async def main():
-    AT = Airtable(key,'liveCopy')
+    AT = Airtable(key,'live')
 
     # get record IDs once at start to minimize API calls
     if MODE == 1:
@@ -78,10 +78,16 @@ async def main():
             AT.names.append('kasa')
 
         logging.debug(AT.names)
-    AT.IDs = await AT.getRecordID(AT.names)
-    logging.debug(AT.IDs)
+
+    try:
+        AT.IDs = await AT.getRecordID(AT.names)
+        logging.debug(AT.IDs)
+    except Exception as e:
+        logging.error(f'Error getting airtable IDs: {e}')
 
     while True:
+        logging.debug('Starting loop!')
+
         now = []
         # get own data - Mode1 not tested
         if MODE == 1:

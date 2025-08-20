@@ -78,8 +78,12 @@ async def main():
             AT.names.append('kasa')
 
         logging.debug(AT.names)
-    AT.IDs = await AT.getRecordID(AT.names)
-    logging.debug(AT.IDs)
+
+    try:
+        AT.IDs = await AT.getRecordID(AT.names)
+        logging.debug(AT.IDs)
+    except Exception as e:
+        logging.error(f'Error getting airtable IDs: {e}')
 
     now = []
     # get own data - Mode1 not tested
