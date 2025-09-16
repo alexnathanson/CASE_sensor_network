@@ -10,7 +10,7 @@ from airtable import Airtable
 
 # ------------------ Config ------------------ #
 #logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable-live.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.DEBUG)
+logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.DEBUG)
 
 #LOG_FILENAME = "kasa_log.log"
 
@@ -34,7 +34,7 @@ except Exception as e:
 # mode: 1 = only individual data; 8 = all data
 MODE = 8
 
-FREQ_SECONDS = 60 * 60 * 2
+FREQ_SECONDS = 60 * 30 #updates every half an hour
 
 async def send_get_request(url,type:str,timeout=1) -> Any:
     """Send GET request to the IP."""

@@ -375,8 +375,8 @@ def health_check():
     except Exception as e:
         branch = f"errpr{str(e)}"
 
-    liveLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable-live.log'
-    statusLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable-status.log'
+    liveLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.log'
+    statusLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.log'
     try:
         # past 3 dates in format (YYYY-MM-DD)
         logDates = []
