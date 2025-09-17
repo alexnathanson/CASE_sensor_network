@@ -52,7 +52,7 @@ class Airtable():
                 records.append({
                     "id": str(recordIDs[n]),
                     "fields": {
-                        "name": str(names[n]),
+                        #"name": str(names[n]),
                         **{key: str(value) for key, value in data[n].items()}
                         }
                     })
