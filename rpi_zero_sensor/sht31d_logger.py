@@ -56,7 +56,7 @@ def cToF(c):
 def main():
 	tempC_list = []
 	humidity_list = []
-	tempC_offset_list = []
+	#tempC_offset_list = []
 
 	startTime = 0
 
@@ -74,7 +74,7 @@ def main():
 		#for r in range(readings):
 		tempC_list.append(sensor.temperature)
 		humidity_list.append(sensor.relative_humidity)
-		tempC_offset_list.append(sensor.temperature + offset)
+		#tempC_offset_list.append(sensor.temperature + offset)
 
 		#collect data every 5 minutes
 		if time.time() - freq > startTime:
@@ -82,12 +82,12 @@ def main():
 			logging.debug(f'loop start: {startTime}')
 
 			tempC = sum(tempC_list)/len(tempC_list)
-			tempC_offset = sum(tempC_offset_list)/len(tempC_offset_list)
+			tempC_offset = tempC + offset #sum(tempC_offset_list)/len(tempC_offset_list)
 			humidity = sum(humidity_list)/len(humidity_list)
 
 			tempC_list = []
 			humidity_list = []
-			tempC_offset_list = []
+			#tempC_offset_list = []
 
 			tempF = cToF(tempC)
 

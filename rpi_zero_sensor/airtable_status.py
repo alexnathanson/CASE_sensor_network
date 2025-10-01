@@ -114,7 +114,7 @@ async def main():
 
             now.append(health)
 
-        url = f"http://kasa.local:5000/api/health"
+        url = f"http://localhost:5000/api/health"
         health =await send_get_request(url,'json')
         # if no results, wait 5 seconds and try again in a few minutes
         if health == {}:

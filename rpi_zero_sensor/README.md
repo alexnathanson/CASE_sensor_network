@@ -19,6 +19,10 @@ Note that it is crucial that the host name of each Pi is unique and follows the 
 
 Also, each device has a bash script the runs around midnight which pulls the most recent version of the code base from Git.
 
+### Calibration
+
+Calibration values for all sensors is found in the calibration.json file. Updating this file will update the calibration configuration for all sensors. The calibration offset value is applied to the Celsius reading.
+
 ## Installation
 
 See <a href='https://github.com/alexnathanson/CASE_sensor_network/blob/main/rpi_zero_sensor/installation.md'>installation doc</a>.
