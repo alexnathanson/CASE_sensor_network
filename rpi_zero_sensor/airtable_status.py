@@ -21,7 +21,7 @@ if not key:
     raise EnvironmentError("Missing Kasa credentials")
 
 # if true collect Kasa data
-includeKasa = True
+#includeKasa = True
 
 try:
     with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
@@ -75,8 +75,8 @@ async def main():
         for n in range(8):
             AT.names.append(f'sensor{n+1}')
 
-        if includeKasa:
-            AT.names.append('kasa')
+
+        AT.names.append('kasa')
 
         logging.debug(AT.names)
 
@@ -114,17 +114,16 @@ async def main():
 
                 now.append(health)
 
-            if includeKasa:
-                url = f"http://kasa.local:5000/api/health"
-                health =await send_get_request(url,'json')
-                # if no results, wait 5 seconds and try again in a few minutes
-                if health == {}:
-                    await asyncio.sleep(5)
-                    health = await send_get_request(url,'json',3)
+            url = f"http://kasa.local:5000/api/health"
+            health =await send_get_request(url,'json')
+            # if no results, wait 5 seconds and try again in a few minutes
+            if health == {}:
+                await asyncio.sleep(5)
+                health = await send_get_request(url,'json',3)
 
-                now.append(health)
+            now.append(health)
 
-            print(now)
+            logging.debug(now)
             try:
                 await AT.updateBatch(AT.names,AT.IDs,now)
             except Exception as e:
