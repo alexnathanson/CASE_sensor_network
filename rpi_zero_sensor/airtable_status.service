@@ -1,13 +1,19 @@
 [Unit]
-Description=Sends status data to airtable once a day
+Description=Sends status data to airtable on start up and up to every 6 hours
 After=network.target
+Wants=network.target
 
 [Service]
-Type=oneshot
 ExecStart=/home/case/venv/bin/python /home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.py
 WorkingDirectory=/home/case
+Restart=always
+RestartSec=5
 User=case
-RemainAfterExit=true
+# Hard memory limit (50MB)
+MemoryMax=50M
+
+# Soft CPU limit (40% of 1 core)
+CPUQuota=40%
 
 [Install]
 WantedBy=multi-user.target

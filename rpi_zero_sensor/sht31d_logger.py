@@ -15,11 +15,14 @@ logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/sht
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
 
+with open("/home/case/CASE_sensor_network/rpi_zero_sensor/calibration.json") as f:
+    calibration = json.load(f)
+
 deviceNum = config["sensor"]["number"]
-offset = config["sensor"]["offsetC"]
+offset = calibration['offsetC'][deviceNum]
 freq = int(config["sensor"]["frequency_seconds"])
 
-readings = 10
+#readings = 10
 
 i2c = board.I2C() # this also works
 sensor = adafruit_sht31d.SHT31D(i2c)
@@ -93,7 +96,8 @@ def main():
 				"tempF": tempF,
 				"humidityP": humidity})
 
-			print(newDF)
+			#print(newDF)
+			logging.debug(newDF)
 
 			# create a new file daily to save data
 			# or append if the file already exists
@@ -106,7 +110,7 @@ def main():
 					#df = df.append(newDF, ignore_index = True)
 					df.to_csv(fileName, sep=',',index=False)
 			except Exception as e:
-				print(e)
+				logging.error(e)
 				newDF.to_csv(fileName, sep=',',index=False)
 
 		time.sleep(10)

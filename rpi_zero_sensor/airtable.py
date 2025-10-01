@@ -44,26 +44,35 @@ class Airtable():
             logging.error(recordIDs)
             logging.error(data)
         logging.debug(names)
+        logging.debug(recordIDs)
+        logging.debug(data)
 
         records = []
         for n in range(len(names)):
             # if data[n]=={}:
             #     continue
 
-            try:
-                logging.debug(f'{names[n]}!')
+            #try:
+            logging.debug(f'{names[n]}!')
 
-                # patch record - columns not included are not changed
-                # keys in data must be identical to Airtable columns
-                records.append({
+            # patch record - columns not included are not changed
+            # keys in data must be identical to Airtable columns
+
+            try:
+                rec = {
                     "id": str(recordIDs[n]),
                     "fields": {
                         "deviceName": str(names[n]),
                         **{key: str(value) for key, value in data[n].items()}
                         }
-                    })
+                    }
             except Exception as e:
                 logging.error(f'Exception while formatting sensor data: {e}')
+                continue
+
+            records.append(rec)
+            # except Exception as e:
+            #     logging.error(f'Exception while formatting sensor data: {e}')
 
         pData={"records": records}
         logging.debug(pData)
