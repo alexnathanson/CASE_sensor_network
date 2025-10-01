@@ -376,42 +376,42 @@ def health_check():
     except Exception as e:
         branch = f"errpr{str(e)}"
 
-    liveLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.log'
-    statusLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.log'
+    # liveLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.log'
+    # statusLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.log'
 
-    try:
-        # past 2 dates in format (YYYY-MM-DD)
-        logDates = []
-        duration = 2
-        for d in range(duration):
-            dt_log = date.today()-timedelta(days=duration-d-1)
-            logDates.append(dt_log.strftime("%Y-%m-%d"))
-        logging.info(f'dates:{logDates}')
+    # try:
+    #     # past 2 dates in format (YYYY-MM-DD)
+    #     logDates = []
+    #     duration = 2
+    #     for d in range(duration):
+    #         dt_log = date.today()-timedelta(days=duration-d-1)
+    #         logDates.append(dt_log.strftime("%Y-%m-%d"))
+    #     logging.info(f'dates:{logDates}')
 
-        # get live logs
-        try:
-            liveLog = []
-            with open(liveLogFile, "r", encoding="utf-8") as f:
-                for line in f:
-                    for d in logDates:
-                        if d in line and ("ERROR" in line or "CRITICAL" in line):
-                            liveLog.append(line.strip())
-        except Exception as e:
-            liveLog = f"Error getting live log: {e}"
+    #     # get live logs
+    #     try:
+    #         liveLog = []
+    #         with open(liveLogFile, "r", encoding="utf-8") as f:
+    #             for line in f:
+    #                 for d in logDates:
+    #                     if d in line and ("ERROR" in line or "CRITICAL" in line):
+    #                         liveLog.append(line.strip())
+    #     except Exception as e:
+    #         liveLog = f"Error getting live log: {e}"
 
-        # get status logs
-        try:
-            statusLog = []
-            with open(statusLogFile, "r", encoding="utf-8") as f:
-                for line in f:
-                    for d in logDates:
-                        if d in line and ("ERROR" in line or "CRITICAL" in line):
-                            statusLog.append(line.strip())
-        except Exception as e:
-            statusLog = f"Error getting status log: {e}"
-    except Exception as e:
-        liveLog = f"Error getting all logs: {e}"
-        statusLog = liveLog
+    #     # get status logs
+    #     try:
+    #         statusLog = []
+    #         with open(statusLogFile, "r", encoding="utf-8") as f:
+    #             for line in f:
+    #                 for d in logDates:
+    #                     if d in line and ("ERROR" in line or "CRITICAL" in line):
+    #                         statusLog.append(line.strip())
+    #     except Exception as e:
+    #         statusLog = f"Error getting status log: {e}"
+    # except Exception as e:
+    #     liveLog = f"Error getting all logs: {e}"
+    #     statusLog = liveLog
 
     return jsonify({
         "datetime": dt.strftime("%Y-%m-%d %H:%M:%S"),
@@ -424,9 +424,9 @@ def health_check():
         "fileStatus":fileStatus,
         "services":serviceDict,
         "branch":branch,
-        "commit":commit,
-        "liveLog":liveLog,
-        "statusLog":statusLog
+        "commit":commit#,
+        # "liveLog":liveLog,
+        # "statusLog":statusLog
     })
 
 if __name__ == "__main__":

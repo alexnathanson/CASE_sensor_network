@@ -35,3 +35,7 @@ quality/ health check
 * check files exist
 * check file sizes
 * spot check amount of rows and data validation
+
+
+fix airtable bug
+callibration
