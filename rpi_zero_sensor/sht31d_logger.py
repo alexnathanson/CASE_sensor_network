@@ -19,7 +19,7 @@ with open("/home/case/CASE_sensor_network/rpi_zero_sensor/calibration.json") as 
     calibration = json.load(f)
 
 deviceNum = config["sensor"]["number"]
-offset = calibration['offsetC'][deviceNum]
+offset = calibration['offsetC'][str(deviceNum)]
 logger.info(f'offset:{offset}')
 
 freq = int(config["sensor"]["frequency_seconds"])
