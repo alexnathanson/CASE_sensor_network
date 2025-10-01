@@ -39,7 +39,7 @@ class Airtable():
     # https://airtable.com/developers/web/api/update-multiple-records
     async def updateBatch(self, names:List, recordIDs:List,data:List):
 
-        if (len(names) != len(data)) and (len(names) != len(recordIDs)):
+        if (len(names) != len(data)) or (len(names) != len(recordIDs)):
             logging.error('length mismatch! :(')
             logging.error(recordIDs)
             logging.error(data)

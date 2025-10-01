@@ -378,13 +378,14 @@ def health_check():
 
     liveLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_live.log'
     statusLogFile='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.log'
+
     try:
         # past 3 dates in format (YYYY-MM-DD)
         logDates = []
         duration = 3
         for d in range(duration):
-            dt = date.today()-timedelta(days=duration-d-1)
-            logDates.append(dt.strftime("%Y-%m-%d"))
+            dt_log = date.today()-timedelta(days=duration-d-1)
+            logDates.append(dt_log.strftime("%Y-%m-%d"))
         logging.info(f'dates:{logDates}')
 
         # get live logs
