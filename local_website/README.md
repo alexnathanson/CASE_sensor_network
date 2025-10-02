@@ -5,8 +5,8 @@ This directory is for the local website. It will only work on the same local net
 This is a front-end JS only site, the pulls data from the APIs running on the Raspberry Pis.
 
 To run:
-* Navigate to the "local_website" directory and run `python -m http.server 8000`
-* In a browser, go to http://localhost:8000/
+* Navigate to the "local_website" directory and run `python -m http.server 8888`
+* In a browser, go to http://localhost:8888
 
 ## Plots
 
