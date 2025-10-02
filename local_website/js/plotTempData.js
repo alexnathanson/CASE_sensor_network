@@ -51,9 +51,9 @@ async function fetchAndParseCSV(url,s) {
     if (s == 'f'){
        tempIndex = headers.findIndex(h => h.includes('tempF'));
     } else if (s == 'c'){
-      tempIndex = headers.findIndex(h => h.includes('tempC_offset'));
-    } else if (s == 'ccal'){
       tempIndex = headers.findIndex(h => h.includes('tempC'));
+    } else if (s == 'ccal'){
+      tempIndex = headers.findIndex(h => h.includes('tempC_offset'));
     } else if (s == 'h'){
       tempIndex = headers.findIndex(h => h.includes('humidity'));
     }
