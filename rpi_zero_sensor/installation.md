@@ -52,7 +52,7 @@ Create .env file if accessing either the Kasa or Airtable APIs.
 Run automated installer script (most recent version isn't tested):<br>
 `sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/installer.sh`
 
-Run the September 16th upday
+Run the September 16th update - this includes some stuff so that the device reboots itself automatically if it stalls
 `sudo bash /home/case/CASE_sensor_network/rpi_zero_sensor/utilities/update_sept16.sh`
 
 After install, update the file start date and location in the config file as necessary.

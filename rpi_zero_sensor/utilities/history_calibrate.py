@@ -1,16 +1,11 @@
 # This is intended to be used only in a situation where all sensors
 # are in the same exact controlled environment
 
-# run this for the callibration time period
-
 import requests
 import pandas as df
 import logging
 import asyncio
 from io import StringIO
-
-# update date as needed
-dataDate = '2025-08-20'
 
 async def send_get_request(url,timeout=1) -> Any:
     max_tries = 3
@@ -33,17 +28,17 @@ async def send_get_request(url,timeout=1) -> Any:
 async def main():
 
     names = []
+    data = []
     for n in range(8):
         names.append(f'sensor{n+1}')
+        data.append([])
 
     logging.debug(names)
-
-    now = []
 
     #1 get NOW data
     for n in range(8):
         url = f"http://pi{n+1}.local:5000/api/data?date=now"
-        now.append(await send_get_request(url))
+        data[n].append(await send_get_request(url))
 
     # convert to df
 
