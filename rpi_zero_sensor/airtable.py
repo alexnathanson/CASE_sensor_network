@@ -20,7 +20,6 @@ class Airtable():
         for n in name:
             logging.debug(name)
 
-            logging.debug(f'Attempt #{attempt+1}')
             try:
                 # get list of records filtered by name
 
