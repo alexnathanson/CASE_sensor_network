@@ -121,7 +121,7 @@ class Airtable():
                     return = False
                 else:
                     logging.debug('SLEEEEEEEEEEEEEEEEEPING')
-                    await asyncio.sleep(1+(int(backoff)* int(attempt)))
+                    await asyncio.sleep(3* int(attempt))
 
     async def send_patch_request(self, url:str, data:Dict={},timeout=1):
 
