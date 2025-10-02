@@ -114,6 +114,9 @@ async function plotTempData(s) {
   } else if (s == 'c'){
     t = 'Temperature (°C)'
     p = 'plotC'
+  } else if (s == 'ccal'){
+    t = 'Temperature (°C)'
+    p = 'plotCCal'
   } else if (s == 'h'){
     t = 'Humidity'
     p = 'plotH'
@@ -128,4 +131,5 @@ async function plotTempData(s) {
 
 plotTempData('f');
 plotTempData('c');
+plotTempData('ccal');
 plotTempData('h');

@@ -10,7 +10,8 @@ from airtable import Airtable
 
 # ------------------ Config ------------------ #
 #logging.basicConfig(level=logging.INFO)
-logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/airtable_status.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.DEBUG)
+logDT = datetime.datetime.now().strftime("%Y-%m-%d")
+logging.basicConfig(filename=f'/home/case/CASE_sensor_network/rpi_zero_sensor/logs/airtable_status_{logDT}.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.DEBUG)
 
 #LOG_FILENAME = "kasa_log.log"
 

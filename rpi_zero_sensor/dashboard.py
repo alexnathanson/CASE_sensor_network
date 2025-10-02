@@ -15,7 +15,7 @@ from typing import Any, Dict, List
 
 # ------------------ Config ------------------ #
 #logging.basicConfig(level=logging.INFO)
-logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/dashboard.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.DEBUG)
+logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/logs/dashboard.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.DEBUG)
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)

@@ -19,11 +19,14 @@ class Airtable():
         IDlist = []
         for n in name:
             logging.debug(name)
+
+            logging.debug(f'Attempt #{attempt+1}')
             try:
                 # get list of records filtered by name
 
                 mURL = f'{self.url}{self.table}?maxRecords=3&view=Grid%20view&filterByFormula=name%3D%22{n}%22' #filter results by name column
                 res = await self.send_secure_get_request(mURL)
+
                 logging.debug(res)
 
                 # pull the id for the first record
@@ -93,23 +96,32 @@ class Airtable():
 
     async def send_secure_get_request(self, url:str,type:str='json',timeout=2) -> Any:
         """Send GET request to the IP."""
-        try:
-            headers = {"Content-Type": "application/json; charset=utf-8"}
+        max_tries = 3
 
-            if self.key != '':
-                headers = {"Authorization": f"Bearer {self.key}"}
+        headers = {"Content-Type": "application/json; charset=utf-8"}
 
-            response = requests.get(url, headers=headers, timeout=timeout)
-            if type == 'json':
-                return response.json()
-            elif type == 'text':
-                return (response.text, response.status_code)
-            else:
-                return response.status_code
-        except requests.Timeout as e:
-            return e
-        except Exception as e:
-            return e
+        if self.key != '':
+            headers = {"Authorization": f"Bearer {self.key}"}
+
+        for attempt in range(max_tries):
+            try:
+                response = requests.get(url, headers=headers, timeout=timeout)
+                response.raise_for_status()
+
+                if type == 'json':
+                    return response.json()
+                elif type == 'text':
+                    return (response.text, response.status_code)
+                else:
+                    return response.status_code
+            except Exception as e:
+                logging.error(f'{e}')
+                if attempt == max_tries-1: # try up to 3 times
+                    logging.debug('FAILED!!!')
+                    return = False
+                else:
+                    logging.debug('SLEEEEEEEEEEEEEEEEEPING')
+                    await asyncio.sleep(1+(int(backoff)* int(attempt)))
 
     async def send_patch_request(self, url:str, data:Dict={},timeout=1):
 

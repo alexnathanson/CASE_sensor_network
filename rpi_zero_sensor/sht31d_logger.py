@@ -10,7 +10,7 @@ import logging
 import subprocess
 
 #logging.basicConfig(level=logging.INFO)
-logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/sht31d.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.INFO)
+logging.basicConfig(filename='/home/case/CASE_sensor_network/rpi_zero_sensor/logs/sht31d.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.INFO)
 
 with open("/home/case/CASE_sensor_network/rpi_zero_sensor/config.json") as f:
     config = json.load(f)
