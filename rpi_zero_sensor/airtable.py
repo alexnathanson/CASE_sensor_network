@@ -118,7 +118,7 @@ class Airtable():
                 logging.error(f'{e}')
                 if attempt == max_tries-1: # try up to 3 times
                     logging.debug('FAILED!!!')
-                    return = False
+                    return False
                 else:
                     logging.debug('SLEEEEEEEEEEEEEEEEEPING')
                     await asyncio.sleep(3* int(attempt))
