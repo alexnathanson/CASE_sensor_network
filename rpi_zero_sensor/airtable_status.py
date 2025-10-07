@@ -69,21 +69,7 @@ async def send_get_request(url,type:str,backoff:int=1,timeout:int=1) -> Any:
 async def main():
     AT = Airtable(key,'status')
 
-    # for n in range(8):
-    #     AT.names.append(f'sensor{n+1}')
-
-
-    # AT.names.append('kasa')
-
-    # logging.debug(AT.names)
-
-    # try:
-    #     AT.IDs = await AT.getRecordID(AT.names)
-    #     logging.debug(AT.IDs)
-    # except Exception as e:
-    #     logging.error(f'Error getting airtable IDs: {e}')
-
-    # get record IDs
+    # get names
     for n in range(8):
         #AT.names.append(f'sensor{n+1}')
         AT.sensors[f'sensor{n+1}']={"id":"","data":""}
@@ -94,17 +80,14 @@ async def main():
 
     AT.names = list(AT.sensors.keys())
 
-    try:
-        await AT.getRecordID(AT.names)
-        logging.debug(AT.sensors)
-    except Exception as e:
-        logging.error(f'Error getting airtable IDs: {e}')
-
-
     while True:
         logging.debug('loop!')
 
-        #now = []
+        try:
+            await AT.getRecordID(AT.names)
+            logging.debug(AT.sensors)
+        except Exception as e:
+            logging.error(f'Error getting airtable IDs: {e}')
 
         for n in range(8):
             url = f"http://pi{n+1}.local:5000/api/health"
@@ -115,16 +98,12 @@ async def main():
                 await asyncio.sleep(5)
                 AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json',3)
 
-            #now.append(health)
-
         url = f"http://localhost:5000/api/health"
         AT.sensors[AT.names[n]]['data'] =await send_get_request(url,'json')
         # if no results, wait 5 seconds and try again in a few minutes
         if AT.sensors[AT.names[n]]['data'] == {}:
             await asyncio.sleep(5)
             AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json',3)
-
-        #now.append(health)
 
         logging.debug(AT.sensors)
 

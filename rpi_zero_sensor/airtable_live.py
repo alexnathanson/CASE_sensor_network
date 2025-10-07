@@ -67,9 +67,8 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
 async def main():
     AT = Airtable(key,'live')
 
-    # get record IDs
+    # get names
     for n in range(8):
-        #AT.names.append(f'sensor{n+1}')
         AT.sensors[f'sensor{n+1}']={"id":"","data":""}
 
     AT.sensors['kasa']={"id":"","data":""}
@@ -78,30 +77,22 @@ async def main():
 
     AT.names = list(AT.sensors.keys())
 
-    try:
-        await AT.getRecordID(AT.names)
-        logging.debug(AT.sensors)
-    except Exception as e:
-        logging.error(f'Error getting airtable IDs: {e}')
-
     while True:
+
         logging.debug('Starting loop!')
 
-        #now = []
-        #nowDict = {}
-        # get own data - Mode1 not tested
-        # if MODE == 1:
+        # get record IDs
+        try:
+            await AT.getRecordID(AT.names)
+            logging.debug(AT.sensors)
+        except Exception as e:
+            logging.error(f'Error getting airtable IDs: {e}')
 
         for n in range(8):
             url = f"http://pi{n+1}.local:5000/api/data?date=now"
-            #now.append(await send_get_request(url,'json'))
             AT.sensors[AT.names[n]]['data']= await send_get_request(url,'json')
 
-            #now.append(await getSensorData(f'pi{n+1}.local'))
-
-        #if includeKasa:
         url = f"http://kasa.local:5000/api/data?date=now"
-        #now.append(await send_get_request(url,'json'))
         AT.sensors['kasa']['data']=await send_get_request(url,'json')
 
         logging.debug(AT.sensors)

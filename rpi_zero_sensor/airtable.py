@@ -11,7 +11,7 @@ class Airtable():
         self.key = key
         self.url = 'https://api.airtable.com/v0/appWyfKF1xclZ6OtH/'
         self.table = table
-        self.IDs = []
+        #self.IDs = []
         self.names=[]
         self.sensors={}
 
@@ -21,22 +21,23 @@ class Airtable():
         for n in name:
             logging.debug(name)
 
-            try:
-                # get list of records filtered by name
+            if self.sensors[n]['id']=='':
+                try:
+                    # get list of records filtered by name
 
-                mURL = f'{self.url}{self.table}?maxRecords=3&view=Grid%20view&filterByFormula=name%3D%22{n}%22' #filter results by name column
-                res = await self.send_secure_get_request(mURL)
+                    mURL = f'{self.url}{self.table}?maxRecords=3&view=Grid%20view&filterByFormula=name%3D%22{n}%22' #filter results by name column
+                    res = await self.send_secure_get_request(mURL)
 
-                logging.debug(res)
+                    logging.debug(res)
 
-                # pull the id for the first record
-                recordID = res['records'][0]['id']
-                #IDlist.append(recordID)
-                self.sensors[n]['id']=recordID
+                    # pull the id for the first record
+                    recordID = res['records'][0]['id']
+                    #IDlist.append(recordID)
+                    self.sensors[n]['id']=recordID
 
-                logging.debug(recordID)
-            except Exception as e:
-                logging.error(e)
+                    logging.debug(recordID)
+                except Exception as e:
+                    logging.error(e)
 
         #return IDlistDict
 
@@ -58,7 +59,7 @@ class Airtable():
                 continue
 
             #try:
-            logging.debug(f'{names[n]}!')
+            logging.debug(f'{n}!')
 
             # patch record - columns not included are not changed
             # keys in data must be identical to Airtable columns
@@ -67,7 +68,7 @@ class Airtable():
                 rec = {
                     "id": str(sensors[n]['id']),
                     "fields": {
-                        "deviceName": str(names[n]),
+                        "deviceName": str(n),
                         **{key: str(value) for key, value in sensors[n]['data'].items()}
                         }
                     }
