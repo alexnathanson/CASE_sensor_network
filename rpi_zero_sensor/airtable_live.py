@@ -67,56 +67,48 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
 async def main():
     AT = Airtable(key,'live')
 
-    # get record IDs once at start to minimize API calls
-    if MODE == 1:
-        AT.names = [f'sensor{deviceNum}']
-    else:
-        for n in range(8):
-            AT.names.append(f'sensor{n+1}')
+    # get record IDs
+    for n in range(8):
+        #AT.names.append(f'sensor{n+1}')
+        AT.sensors[f'sensor{n+1}']={"id":"","data":""}
 
-        #if includeKasa:
-        AT.names.append('kasa')
+    AT.sensors['kasa']={"id":"","data":""}
 
-        logging.debug(AT.names)
+    logging.debug(AT.sensors)
+
+    AT.names = list(AT.sensors.keys())
 
     try:
-        AT.IDs = await AT.getRecordID(AT.names)
-        logging.debug(AT.IDs)
+        await AT.getRecordID(AT.names)
+        logging.debug(AT.sensors)
     except Exception as e:
         logging.error(f'Error getting airtable IDs: {e}')
 
     while True:
         logging.debug('Starting loop!')
 
-        now = []
+        #now = []
+        #nowDict = {}
         # get own data - Mode1 not tested
-        if MODE == 1:
+        # if MODE == 1:
 
-            url = f"http://{localhost}:5000/api/data?date=now"
-            now.append(await send_get_request(url,'json'))
+        for n in range(8):
+            url = f"http://pi{n+1}.local:5000/api/data?date=now"
+            #now.append(await send_get_request(url,'json'))
+            AT.sensors[AT.names[n]]['data']= await send_get_request(url,'json')
 
-            try:
-                await AT.updateBatch(AT.names,AT.IDs,now)
-            except Exception as e:
-                logging.error(e)
+            #now.append(await getSensorData(f'pi{n+1}.local'))
 
-        # get everyone elses data
-        else:
-            for n in range(8):
-                url = f"http://pi{n+1}.local:5000/api/data?date=now"
-                now.append(await send_get_request(url,'json'))
+        #if includeKasa:
+        url = f"http://kasa.local:5000/api/data?date=now"
+        #now.append(await send_get_request(url,'json'))
+        AT.sensors['kasa']['data']=await send_get_request(url,'json')
 
-                #now.append(await getSensorData(f'pi{n+1}.local'))
-
-            #if includeKasa:
-            url = f"http://kasa.local:5000/api/data?date=now"
-            now.append(await send_get_request(url,'json'))
-
-            logging.debug(AT.names)
-            try:
-                await AT.updateBatch(AT.names,AT.IDs,now)
-            except Exception as e:
-                logging.error(e)
+        logging.debug(AT.sensors)
+        try:
+            await AT.updateBatch(AT.names,AT.sensors)
+        except Exception as e:
+            logging.error(e)
 
         logging.debug(f'Sleeping for {FREQ_SECONDS/60} minutes.')
         await asyncio.sleep(FREQ_SECONDS)

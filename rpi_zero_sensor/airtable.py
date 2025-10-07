@@ -13,10 +13,11 @@ class Airtable():
         self.table = table
         self.IDs = []
         self.names=[]
+        self.sensors={}
 
     # retrieves record IDs by name
     async def getRecordID(self,name:List)-> List:
-        IDlist = []
+        #IDlist = []
         for n in name:
             logging.debug(name)
 
@@ -30,28 +31,30 @@ class Airtable():
 
                 # pull the id for the first record
                 recordID = res['records'][0]['id']
-                IDlist.append(recordID)
+                #IDlist.append(recordID)
+                self.sensors[n]['id']=recordID
+
                 logging.debug(recordID)
             except Exception as e:
                 logging.error(e)
 
-        return IDlist
+        #return IDlistDict
 
     # updates up to 10 records at once
     # https://airtable.com/developers/web/api/update-multiple-records
-    async def updateBatch(self, names:List, recordIDs:List,data:List):
+    async def updateBatch(self, names:List, sensors:List):
 
-        if (len(names) != len(data)) or (len(names) != len(recordIDs)):
-            logging.error('length mismatch! :(')
-            logging.error(recordIDs)
-            logging.error(data)
-        logging.debug(names)
-        logging.debug(recordIDs)
-        logging.debug(data)
+        # if (len(names) != len(data)) or (len(names) != len(recordIDs)):
+        #     logging.error('length mismatch! :(')
+        #     logging.error(recordIDs)
+        #     logging.error(data)
+        # logging.debug(names)
+        # logging.debug(recordIDs)
+        # logging.debug(data)
 
         records = []
-        for n in range(len(names)):
-            if data[n]=={}:
+        for n in names:
+            if sensors[n]['data']=={}:
                 continue
 
             #try:
@@ -62,10 +65,10 @@ class Airtable():
 
             try:
                 rec = {
-                    "id": str(recordIDs[n]),
+                    "id": str(sensors[n]['id']),
                     "fields": {
                         "deviceName": str(names[n]),
-                        **{key: str(value) for key, value in data[n].items()}
+                        **{key: str(value) for key, value in sensors[n]['data'].items()}
                         }
                     }
             except Exception as e:

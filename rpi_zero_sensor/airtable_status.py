@@ -69,64 +69,67 @@ async def send_get_request(url,type:str,backoff:int=1,timeout:int=1) -> Any:
 async def main():
     AT = Airtable(key,'status')
 
-    # get record IDs once at start to minimize API calls
-    # if MODE == 1:
-    #     AT.names = [f'sensor{deviceNum}']
-    # else:
+    # for n in range(8):
+    #     AT.names.append(f'sensor{n+1}')
+
+
+    # AT.names.append('kasa')
+
+    # logging.debug(AT.names)
+
+    # try:
+    #     AT.IDs = await AT.getRecordID(AT.names)
+    #     logging.debug(AT.IDs)
+    # except Exception as e:
+    #     logging.error(f'Error getting airtable IDs: {e}')
+
+    # get record IDs
     for n in range(8):
-        AT.names.append(f'sensor{n+1}')
+        #AT.names.append(f'sensor{n+1}')
+        AT.sensors[f'sensor{n+1}']={"id":"","data":""}
 
+    AT.sensors['kasa']={"id":"","data":""}
 
-    AT.names.append('kasa')
+    logging.debug(AT.sensors)
 
-    logging.debug(AT.names)
+    AT.names = list(AT.sensors.keys())
 
     try:
-        AT.IDs = await AT.getRecordID(AT.names)
-        logging.debug(AT.IDs)
+        await AT.getRecordID(AT.names)
+        logging.debug(AT.sensors)
     except Exception as e:
         logging.error(f'Error getting airtable IDs: {e}')
+
 
     while True:
         logging.debug('loop!')
 
-        now = []
-        # # get own data - Mode1 not tested
-        # if MODE == 1:
+        #now = []
 
-        #     url = f"http://{localhost}:5000/api/health"
-        #     now.append(await send_get_request(url,'json'))
-
-        #     try:
-        #         await AT.updateBatch(AT.names,AT.IDs,now)
-        #     except Exception as e:
-        #         logging.error(e)
-
-        # get everyone elses data
-        #else:
         for n in range(8):
             url = f"http://pi{n+1}.local:5000/api/health"
-            health = await send_get_request(url,'json')
+            AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json')
 
             # if no results, wait 5 seconds and try again in a few minutes
-            if health == {}:
+            if AT.sensors[AT.names[n]]['data'] == {}:
                 await asyncio.sleep(5)
-                health = await send_get_request(url,'json',3)
+                AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json',3)
 
-            now.append(health)
+            #now.append(health)
 
         url = f"http://localhost:5000/api/health"
-        health =await send_get_request(url,'json')
+        AT.sensors[AT.names[n]]['data'] =await send_get_request(url,'json')
         # if no results, wait 5 seconds and try again in a few minutes
-        if health == {}:
+        if AT.sensors[AT.names[n]]['data'] == {}:
             await asyncio.sleep(5)
-            health = await send_get_request(url,'json',3)
+            AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json',3)
 
-        now.append(health)
+        #now.append(health)
 
-        logging.debug(now)
+        logging.debug(AT.sensors)
+
         try:
-            await AT.updateBatch(AT.names,AT.IDs,now)
+            await AT.updateBatch(AT.names,AT.sensors)
         except Exception as e:
             logging.error(e)
 
