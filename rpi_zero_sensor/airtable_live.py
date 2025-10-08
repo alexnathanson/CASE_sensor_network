@@ -12,7 +12,7 @@ from airtable import Airtable
 # ------------------ Config ------------------ #
 #logging.basicConfig(level=logging.DEBUG)
 logDT = datetime.datetime.now().strftime("%Y-%m-%d")
-logging.basicConfig(filename=f'/home/case/CASE_sensor_network/rpi_zero_sensor/logs/airtable_live_{logDT}.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.DEBUG)
+logging.basicConfig(filename=f'/home/case/CASE_sensor_network/rpi_zero_sensor/logs/airtable_live_{logDT}.log',format='%(asctime)s - %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',datefmt='%Y-%m-%d %H:%M:%S',level=logging.INFO)
 
 load_dotenv()
 key = os.getenv('AIRTABLE')

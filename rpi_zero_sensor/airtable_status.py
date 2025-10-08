@@ -89,6 +89,7 @@ async def main():
         except Exception as e:
             logging.error(f'Error getting airtable IDs: {e}')
 
+        # sensor data
         for n in range(8):
             url = f"http://pi{n+1}.local:5000/api/health"
             AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json')
@@ -98,12 +99,13 @@ async def main():
                 await asyncio.sleep(5)
                 AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json',3)
 
-        url = f"http://localhost:5000/api/health"
-        AT.sensors[AT.names[n]]['data'] =await send_get_request(url,'json')
+        # kasa data
+        url = f"http://kasa.local:5000/api/health"
+        AT.sensors['kasa']['data'] =await send_get_request(url,'json')
         # if no results, wait 5 seconds and try again in a few minutes
-        if AT.sensors[AT.names[n]]['data'] == {}:
+        if AT.sensors['kasa']['data'] == {}:
             await asyncio.sleep(5)
-            AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json',3)
+            AT.sensors['kasa']['data'] = await send_get_request(url,'json',3)
 
         logging.debug(AT.sensors)
 
