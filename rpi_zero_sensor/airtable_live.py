@@ -36,7 +36,7 @@ MODE = 8
 
 FREQ_SECONDS = 60 * 20 #updates every half an hour
 
-async def send_get_request(url,type:str,timeout=1) -> Any:
+async def send_get_request(url,type:str,backoff:int=1,timeout=1) -> Any:
     """Send GET request to the IP."""
 
     # get own data
@@ -60,7 +60,7 @@ async def send_get_request(url,type:str,timeout=1) -> Any:
                 logging.debug('FAILED!!!')
             else:
                 logging.debug('SLEEEEEEEEEEEEEEEEEPING')
-                await asyncio.sleep(1)
+                await asyncio.sleep(1+(int(backoff)* int(attempt)))
 
     return res
 
@@ -88,12 +88,26 @@ async def main():
         except Exception as e:
             logging.error(f'Error getting airtable IDs: {e}')
 
+        # sensor data
         for n in range(8):
             url = f"http://pi{n+1}.local:5000/api/data?date=now"
             AT.sensors[AT.names[n]]['data']= await send_get_request(url,'json')
 
+            # if no results, wait 5 seconds and try again in a few minutes
+            if AT.sensors[AT.names[n]]['data'] == {}:
+                await asyncio.sleep(5)
+                AT.sensors[AT.names[n]]['data'] = await send_get_request(url,'json',3)
+
+
+        # kasa data
         url = f"http://kasa.local:5000/api/data?date=now"
         AT.sensors['kasa']['data']=await send_get_request(url,'json')
+
+        # if no results, wait 5 seconds and try again in a few minutes
+        if AT.sensors['kasa']['data'] == {}:
+            await asyncio.sleep(5)
+            AT.sensors['kasa']['data'] = await send_get_request(url,'json',3)
+
 
         logging.debug(AT.sensors)
         try:
